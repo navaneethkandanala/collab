@@ -60,16 +60,20 @@
                 <span class="text-3xl font-extrabold text-blue-500 font-garamond">DDC</span>
                 <span class="text-2xl font-bold text-gray-800">THE DAILY DAIRY CO.</span>
             </div>
-            <nav class="hidden md:flex items-center space-x-6">
+            <nav class="hidden md:flex items-center space-x-4">
                 <a href="#products" class="text-gray-600 hover:text-blue-500 font-medium">Our Products</a>
                 <a href="#about" class="text-gray-600 hover:text-blue-500 font-medium">About Us</a>
                 <a href="#contact" class="text-gray-600 hover:text-blue-500 font-medium">Contact</a>
-                <button aria-label="Search" class="p-2 text-gray-600 hover:text-blue-500 rounded-full hover:bg-gray-100 transition duration-300">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-                <!-- New: Shopping Cart Button -->
+                <!-- Updated: Search input field with icon -->
+                <div class="relative">
+                    <input id="search-bar" type="search" placeholder="Search products..." class="w-48 px-4 py-2 pl-10 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Shopping Cart Button -->
                 <button aria-label="Shopping Cart" class="p-2 text-gray-600 hover:text-blue-500 rounded-full hover:bg-gray-100 transition duration-300">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -115,9 +119,10 @@
                     Explore our selection of farm-fresh products, delivered daily to your home.
                 </p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Added an ID to the product grid for easy access by JavaScript -->
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Product Card 1: Whole Milk -->
-                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center product-card">
                     <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Whole+Milk" alt="A bottle of fresh whole milk" class="rounded-lg mb-4 w-full">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Whole Milk</h3>
                     <p class="text-gray-500 mb-4">
@@ -129,7 +134,7 @@
                     </button>
                 </div>
                 <!-- Product Card 2: Skim Milk -->
-                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center product-card">
                     <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Skim+Milk" alt="A carton of fresh skim milk" class="rounded-lg mb-4 w-full">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Skim Milk</h3>
                     <p class="text-gray-500 mb-4">
@@ -141,7 +146,7 @@
                     </button>
                 </div>
                 <!-- Product Card 3: Flavored Yogurt -->
-                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center product-card">
                     <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Yogurt" alt="A container of delicious fruit yogurt" class="rounded-lg mb-4 w-full">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Flavored Yogurt</h3>
                     <p class="text-gray-500 mb-4">
@@ -389,11 +394,11 @@
         </footer>
     </div>
 
-    <!-- JavaScript for the animated order tracker chat -->
+    <!-- JavaScript for the animated order tracker chat and search functionality -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Chat functionality
             const chatBox = document.getElementById('chat-box');
-            
             const messages = [
                 { sender: 'system', text: 'Welcome! Your order has been placed and is now being processed at the farm.' },
                 { sender: 'user', text: 'Hi! Can you tell me the status of my milk delivery?' },
@@ -431,8 +436,28 @@
                 }
             }
             
-            // Start the message display process on page load
             addMessage();
+
+            // Search functionality
+            const searchBar = document.getElementById('search-bar');
+            const productGrid = document.getElementById('product-grid');
+            const productCards = productGrid.getElementsByClassName('product-card');
+
+            searchBar.addEventListener('input', (e) => {
+                const searchQuery = e.target.value.toLowerCase();
+
+                Array.from(productCards).forEach(card => {
+                    const productName = card.querySelector('h3').textContent.toLowerCase();
+                    const productDesc = card.querySelector('p').textContent.toLowerCase();
+                    
+                    // Check if the search query is in the product name or description
+                    if (productName.includes(searchQuery) || productDesc.includes(searchQuery)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
         });
     </script>
 
