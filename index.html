@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Truck Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #2e86de;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin: 1rem;
+      width: 300px;
+      padding: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #2e86de;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .pros-cons {
+      margin-top: 1rem;
+    }
+
+    .pros, .cons {
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      border-radius: 4px;
+    }
+
+    .pros {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .cons {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #eee;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Truck Information Dashboard</h1>
+    <p>Compare various trucks and understand their pros & cons</p>
+  </header>
+
+  <div class="container" id="truckContainer">
+    <!-- Cards will be injected here -->
+  </div>
+
+  <footer>
+    &copy; 2025 Truck Info Hub
+  </footer>
+
+  <script>
+    const trucks = [
+      {
+        name: "Pickup Truck",
+        description: "A light-duty truck with an enclosed cab and open cargo area.",
+        pros: ["Great for personal & small business use", "Easy to drive", "Fuel efficient (relatively)"],
+        cons: ["Limited towing capacity", "Smaller cargo space"]
+      },
+      {
+        name: "Semi-Truck (18-Wheeler)",
+        description: "Heavy-duty truck used for long-haul freight transport.",
+        pros: ["Massive cargo capacity", "Long-distance hauling", "Essential for logistics"],
+        cons: ["Expensive to maintain", "Requires CDL license", "High fuel consumption"]
+      },
+      {
+        name: "Dump Truck",
+        description: "Used to carry loose materials like sand, gravel, or demolition waste.",
+        pros: ["Ideal for construction", "Strong hydraulic system", "High payload"],
+        cons: ["Low fuel efficiency", "Limited to specific tasks"]
+      },
+      {
+        name: "Box Truck",
+        description: "A truck with a cuboid cargo area. Commonly used for moving furniture and equipment.",
+        pros: ["Good for moving services", "Easy to load/unload", "No trailer required"],
+        cons: ["Limited cargo volume", "Harder to maneuver than pickups"]
+      },
+      {
+        name: "Flatbed Truck",
+        description: "Truck with a flat, open bed. Great for oversized or irregular loads.",
+        pros: ["Flexible cargo options", "Easy to load from any angle"],
+        cons: ["No weather protection", "Requires proper securing of load"]
+      }
+    ];
+
+    const container = document.getElementById("truckContainer");
+
+    function createTruckCard(truck) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const title = document.createElement("h3");
+      title.textContent = truck.name;
+
+      const desc = document.createElement("p");
+      desc.textContent = truck.description;
+
+      const prosHeader = document.createElement("h4");
+      prosHeader.textContent = "Pros:";
+      const prosList = document.createElement("div");
+      truck.pros.forEach(item => {
+        const p = document.createElement("div");
+        p.className = "pros";
+        p.textContent = "✓ " + item;
+        prosList.appendChild(p);
+      });
+
+      const consHeader = document.createElement("h4");
+      consHeader.textContent = "Cons:";
+      const consList = document.createElement("div");
+      truck.cons.forEach(item => {
+        const c = document.createElement("div");
+        c.className = "cons";
+        c.textContent = "✗ " + item;
+        consList.appendChild(c);
+      });
+
+      card.appendChild(title);
+      card.appendChild(desc);
+      card.appendChild(prosHeader);
+      card.appendChild(prosList);
+      card.appendChild(consHeader);
+      card.appendChild(consList);
+
+      return card;
+    }
+
+    // Load all trucks into the container
+    trucks.forEach(truck => {
+      container.appendChild(createTruckCard(truck));
+    });
+  </script>
+</body>
+</html>
