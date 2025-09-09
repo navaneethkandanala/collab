@@ -69,6 +69,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </button>
+                <!-- New: Shopping Cart Button -->
+                <button aria-label="Shopping Cart" class="p-2 text-gray-600 hover:text-blue-500 rounded-full hover:bg-gray-100 transition duration-300">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </button>
                 <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
                     Order Now
                 </button>
@@ -99,8 +105,58 @@
             </div>
         </section>
 
-        <!-- Our Promise Section -->
+        <!-- New Products Section -->
         <section id="products" class="p-8 md:p-12 lg:p-16 bg-blue-50 border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    Our Dairy Products
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Explore our selection of farm-fresh products, delivered daily to your home.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product Card 1: Whole Milk -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Whole+Milk" alt="A bottle of fresh whole milk" class="rounded-lg mb-4 w-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Whole Milk</h3>
+                    <p class="text-gray-500 mb-4">
+                        Creamy, rich, and full of natural goodness. Perfect for the whole family.
+                    </p>
+                    <p class="text-2xl font-bold text-blue-600 mb-4">₹331</p>
+                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+                <!-- Product Card 2: Skim Milk -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Skim+Milk" alt="A carton of fresh skim milk" class="rounded-lg mb-4 w-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Skim Milk</h3>
+                    <p class="text-gray-500 mb-4">
+                        A light and refreshing option, with all the essential nutrients and no fat.
+                    </p>
+                    <p class="text-2xl font-bold text-blue-600 mb-4">₹289</p>
+                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+                <!-- Product Card 3: Flavored Yogurt -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <img src="https://placehold.co/400x300/E6F0F8/4B5563?text=Yogurt" alt="A container of delicious fruit yogurt" class="rounded-lg mb-4 w-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Flavored Yogurt</h3>
+                    <p class="text-gray-500 mb-4">
+                        Tangy and smooth yogurt with real fruit chunks. A perfect snack.
+                    </p>
+                    <p class="text-2xl font-bold text-blue-600 mb-4">₹231</p>
+                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Promise Section -->
+        <section id="our-promise" class="p-8 md:p-12 lg:p-16 bg-blue-50 border-t border-gray-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
                     Our Promise of Freshness
@@ -282,7 +338,7 @@
                 <p class="text-gray-600 max-w-2xl mx-auto">
                     Have questions about our milk or delivery service? We'd love to hear from you.
                 </p>
-            </div>
+            </p>
             <div class="max-w-3xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <div class="p-6 bg-blue-50 rounded-xl shadow-custom">
