@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -7,523 +7,308 @@
   <style>
     :root{
       --bg:#0f172a;        /* slate-900 */
-      --panel:#111827;     /* gray-900 */
-      --muted:#94a3b8;     /* slate-400 */
-      --text:#e5e7eb;      /* gray-200 */
-      --accent:#22d3ee;    /* cyan-400 */
-      --accent-2:#a78bfa;  /* violet-400 */
-      --good:#22c55e;      /* green-500 */
-      --bad:#ef4444;       /* red-500 */
-      --warn:#f59e0b;      /* amber-500 */
-      --card:#0b1224;      /* custom */
-      --chip:#1f2937;      /* gray-800 */
-      --border:#1f2937;
-      --shadow: 0 10px 25px rgba(0,0,0,.35);
-      --radius: 18px;
+      --panel:#0b1220;     /* darker panel */
+      --muted:#94a3b8;     /* muted text */
+      --accent:#06b6d4;    /* cyan */
+      --glass: rgba(255,255,255,0.03);
+      --card: #0b1220;
+      --radius:12px;
+      color-scheme: dark;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
-      color:var(--text); background: radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.12), transparent 60%),
-                         radial-gradient(800px 500px at 10% 0%, rgba(167,139,250,.12), transparent 50%),
-                         var(--bg);
-    }
-    .app{display:grid; grid-template-columns: 280px 1fr; min-height:100vh}
-    aside{
-      padding:20px; border-right:1px solid var(--border); background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 10%), var(--panel);
-    }
-    main{padding:22px 24px 32px;}
-    .brand{display:flex; gap:10px; align-items:center; margin-bottom:14px}
-    .logo{width:36px; height:36px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow)}
-    h1{font-size:18px; margin:0}
-    .muted{color:var(--muted)}
-    .section-title{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,#041226 0%, #071028 60%);color:#e6eef6}
+    .app{max-width:1200px;margin:28px auto;padding:22px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    header p{margin:0;color:var(--muted);font-size:13px}
 
-    input, select, button, .chip{
-      background:var(--chip); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:10px 12px;
-    }
-    input, select{width:100%}
-    label{display:block; font-size:13px; color:var(--muted); margin:10px 0 6px}
-    .row{display:flex; gap:10px}
+    .controls{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .search{flex:1;display:flex}
+    .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--glass);color:inherit}
+    .select, .button{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .layout{display:grid;grid-template-columns:380px 1fr;gap:18px}
 
-    .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:2px 0 14px}
-    .toolbar .grow{flex:1}
-    .search{width:100%; padding:12px 14px; border-radius:14px}
+    /* left list */
+    .list{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:var(--radius);height:72vh;overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+    .truck-card{display:flex;gap:12px;padding:10px;border-radius:10px;align-items:center;cursor:pointer;margin-bottom:8px;border:1px solid transparent}
+    .truck-card:hover{background:rgba(255,255,255,0.01);border-color:rgba(255,255,255,0.02)}
+    .truck-card.active{box-shadow:0 6px 18px rgba(3,7,18,0.6);border-color:rgba(6,182,212,0.12)}
+    .truck-thumb{width:72px;height:54px;border-radius:8px;overflow:hidden;flex-shrink:0}
+    .truck-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .truck-meta{flex:1}
+    .truck-meta h3{margin:0;font-size:14px}
+    .truck-meta p{margin:4px 0 0;color:var(--muted);font-size:12px}
 
-    .kpis{display:grid; grid-template-columns: repeat(4, minmax(160px,1fr)); gap:14px; margin:12px 0 18px}
-    .kpi{background:linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel); border:1px solid var(--border); padding:16px; border-radius:var(--radius); box-shadow: var(--shadow)}
-    .kpi h3{margin:0; font-size:12px; color:var(--muted)}
-    .kpi .val{font-size:22px; margin-top:6px}
+    /* right panel */
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:var(--radius);min-height:72vh;border:1px solid rgba(255,255,255,0.03)}
+    .panel-top{display:flex;gap:18px}
+    .main-image{width:420px;height:260px;border-radius:10px;overflow:hidden;flex-shrink:0}
+    .main-image img{width:100%;height:100%;object-fit:cover}
+    .summary{flex:1}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tag{padding:6px 8px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,0.04)}
+    .specs{display:flex;gap:12px;margin-top:12px}
+    .spec{background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;flex:1;text-align:center}
+    .spec h4{margin:0;font-size:12px}
+    .spec p{margin:6px 0 0;font-size:14px}
+    .section{margin-top:14px}
+    .section h3{margin:0 0 8px 0}
+    .pros, .cons{display:flex;gap:10px;flex-direction:column}
+    .chip{padding:10px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
 
-    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column}
-    .badge{position:absolute; top:12px; left:12px; background:rgba(0,0,0,.45); padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,.08)}
-    .card-hero{position:relative; height:140px; background:
-      radial-gradient(400px 120px at 60% -20%, rgba(34,211,238,.25), transparent),
-      radial-gradient(260px 120px at 20% -40%, rgba(167,139,250,.25), transparent),
-      linear-gradient(135deg, #0b1224, #0c1220);
-      display:grid; align-items:end; padding:12px 12px
-    }
-    .title{font-size:16px; font-weight:700}
-    .subtitle{font-size:13px; color:var(--muted)}
-    .card-body{padding:12px 14px; display:grid; gap:10px}
-    .chips{display:flex; gap:8px; flex-wrap:wrap}
-    .chip{font-size:12px; padding:6px 10px}
-    .pros, .cons{display:grid; gap:6px}
-    .li{display:flex; gap:8px; align-items:flex-start; font-size:13px}
-    .li.good::before{content:"+"; color:var(--good)}
-    .li.bad::before{content:"–"; color:var(--bad)}
+    .compare-row{display:flex;gap:12px;margin-top:12px}
+    .compare-item{flex:1;padding:10px;border-radius:10px;border:1px dashed rgba(255,255,255,0.03);min-height:120px}
 
-    .card-foot{display:flex; gap:8px; padding:12px 14px; margin-top:auto; border-top:1px solid var(--border)}
-    .btn{cursor:pointer; border-radius:12px; padding:10px 12px; border:1px solid var(--border); background:linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel)}
-    .btn.primary{background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#0b1020; font-weight:700; border:none}
-    .btn.ghost{background:transparent}
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
 
-    .empty{opacity:.75; padding:24px; text-align:center; border:1px dashed var(--border); border-radius:var(--radius)}
-
-    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(2,6,23,.6); backdrop-filter: blur(6px);}
-    .modal.open{display:grid}
-    .sheet{width:min(880px, 92vw); max-height:88vh; overflow:auto; background:var(--panel); border:1px solid var(--border); border-radius:24px; box-shadow: var(--shadow)}
-    .sheet header{display:flex; justify-content:space-between; align-items:center; padding:16px 18px; border-bottom:1px solid var(--border)}
-    .sheet .content{display:grid; gap:12px; padding:16px 18px}
-    .specs{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px}
-    .spec{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 12px}
-    .spec .k{font-size:12px; color:var(--muted)}
-    .spec .v{font-size:15px; margin-top:2px}
-
-    .compare-bar{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:var(--panel); border:1px solid var(--border); border-radius:999px; padding:10px; display:none; gap:8px; align-items:center}
-    .compare-bar.open{display:flex}
-    .pill{background:var(--chip); border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px}
-
-    .footer{margin-top:22px; color:var(--muted); font-size:12px}
-    .link{color:var(--accent)}
-
-    @media (max-width: 860px){
-      .app{grid-template-columns: 1fr}
-      aside{position:sticky; top:0; z-index:1}
-      .kpis{grid-template-columns: repeat(2, minmax(0,1fr))}
+    /* responsive */
+    @media (max-width:900px){
+      .layout{grid-template-columns:1fr;}
+      .main-image{width:100%;height:200px}
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <aside>
-      <div class="brand">
-        <div class="logo">🚚</div>
-        <div>
-          <h1>Truck Dashboard</h1>
-          <div class="muted">Browse, compare, decide.</div>
-        </div>
+    <header>
+      <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-weight:700">TD</div>
+      <div>
+        <h1>Truck Info Dashboard</h1>
+        <p>Compare trucks, view specs, pros & cons, and images — single-file demo.</p>
       </div>
+    </header>
 
-      <label for="q">Search</label>
-      <input id="q" class="search" placeholder="Search by make, model, or notes…" />
-
-      <div class="section-title">Filters</div>
-      <label for="segment">Segment</label>
-      <select id="segment">
-        <option value="">All</option>
-        <option>Pickup / Light</option>
-        <option>Medium Duty</option>
-        <option>Heavy Duty</option>
-        <option>Tractor Trailer</option>
-        <option>Tipper / Construction</option>
+    <div class="controls">
+      <div class="search"><input id="search" placeholder="Search by name or manufacturer..." /></div>
+      <select id="filter" class="select">
+        <option value="all">All manufacturers</option>
       </select>
+      <button id="reset" class="button">Reset</button>
+    </div>
 
-      <div class="row">
-        <div style="flex:1">
-          <label for="fuel">Fuel</label>
-          <select id="fuel">
-            <option value="">Any</option>
-            <option>Diesel</option>
-            <option>CNG</option>
-            <option>Electric</option>
-            <option>Hybrid</option>
-          </select>
+    <div class="layout">
+      <aside class="list" id="truckList" aria-label="Truck list">
+        <!-- cards inserted by JS -->
+      </aside>
+
+      <main class="panel" id="detailPanel">
+        <div class="panel-top">
+          <div class="main-image" id="mainImage">
+            <!-- image -->
+          </div>
+          <div class="summary">
+            <h2 id="title">Select a truck</h2>
+            <p id="subtitle" style="color:var(--muted)"></p>
+            <div class="tags" id="tags"></div>
+            <div class="specs" id="specs"></div>
+          </div>
         </div>
-        <div style="flex:1">
-          <label for="drive">Drive</label>
-          <select id="drive">
-            <option value="">Any</option>
-            <option>4x2</option>
-            <option>4x4</option>
-            <option>6x2</option>
-            <option>6x4</option>
-            <option>8x2</option>
-            <option>8x4</option>
-          </select>
+
+        <div class="section">
+          <h3>Overview</h3>
+          <div id="overview" class="chip">Choose a truck from the left to see details.</div>
         </div>
-      </div>
 
-      <label for="sort">Sort by</label>
-      <select id="sort">
-        <option value="rating-desc">Rating (high → low)</option>
-        <option value="payload-desc">Payload (high → low)</option>
-        <option value="range-desc">Range (high → low)</option>
-        <option value="name-asc">Name (A → Z)</option>
-      </select>
-
-      <div class="section-title">CSV</div>
-      <button id="exportCsv" class="btn" style="width:100%">Export current list</button>
-
-      <div class="section-title">Add custom truck</div>
-      <div class="row">
-        <input id="newName" placeholder="Make & model" style="flex:2" />
-        <input id="newPayload" placeholder="Payload (t)" style="flex:1" />
-      </div>
-      <div class="row" style="margin-top:6px">
-        <input id="newSegment" placeholder="Segment" style="flex:1" />
-        <input id="newFuel" placeholder="Fuel" style="flex:1" />
-      </div>
-      <button id="addTruck" class="btn" style="margin-top:8px; width:100%">Add to list</button>
-
-      <div class="footer">Tip: Ctrl/⌘+K to focus search • Your additions save to your browser.</div>
-    </aside>
-
-    <main>
-      <div class="toolbar">
-        <div class="grow"></div>
-        <button id="reset" class="btn ghost">Reset filters</button>
-      </div>
-
-      <section class="kpis" id="kpis"></section>
-
-      <section id="cards" class="grid"></section>
-      <div id="empty" class="empty" style="display:none">No results. Try clearing filters.</div>
-
-      <div class="footer">Built with plain HTML/CSS/JS. Data is illustrative and may vary by variant/market.</div>
-    </main>
-  </div>
-
-  <!-- Details Modal -->
-  <div class="modal" id="modal">
-    <div class="sheet">
-      <header>
-        <div>
-          <div id="mTitle" class="title"></div>
-          <div id="mSub" class="subtitle"></div>
+        <div class="section" style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <h3>Pros</h3>
+            <div id="pros" class="pros"></div>
+          </div>
+          <div style="flex:1;min-width:240px">
+            <h3>Cons</h3>
+            <div id="cons" class="cons"></div>
+          </div>
         </div>
-        <button class="btn" onclick="closeModal()">Close</button>
-      </header>
-      <div class="content">
-        <div id="mNotes" class="muted"></div>
-        <div class="specs" id="mSpecs"></div>
-        <div>
-          <h3>Pros</h3>
-          <div id="mPros" class="pros"></div>
+
+        <div class="section">
+          <h3>Quick Compare</h3>
+          <div class="compare-row" id="compareRow">
+            <div class="compare-item" id="cmpA">Drop one truck here</div>
+            <div class="compare-item" id="cmpB">Drop another truck here</div>
+          </div>
         </div>
-        <div>
-          <h3>Cons</h3>
-          <div id="mCons" class="cons"></div>
-        </div>
-      </div>
+
+        <footer>
+          Tip: click truck cards to view details. Use the search box and filter to narrow the list. This is a demo — replace images/data as needed.
+        </footer>
+      </main>
     </div>
   </div>
 
-  <!-- Compare Bar -->
-  <div id="compareBar" class="compare-bar">
-    <span class="muted" style="margin-left:6px">Compare:</span>
-    <div id="comparePills" class="row" style="gap:6px"></div>
-    <button id="compareBtn" class="btn primary">Open Compare</button>
-  </div>
-
   <script>
-  // ---------------------- Data ----------------------
-  const baseTrucks = [
-    {
-      id:"tata-signa-2818t", name:"Tata Signa 2818.T", make:"Tata", segment:"Tractor Trailer", fuel:"Diesel", drive:"6x4",
-      payloadT: 20.0, gvwrT: 28.0, powerHP:180, torqueNm:850, rangeKm: 900, efficiency: "~3.5 km/l", transmission:"Manual",
-      rating: 4.2, price:"₹30–35L (ex‑showroom)",
-      pros:["Strong dealer/service network in India","Robust chassis and axle setup","Good resale value"],
-      cons:["Cabin ergonomics are basic","Ride can be stiff unloaded"],
-      notes:"Popular Indian tractor for long‑haul freight; spec varies by variant.",
-    },
-    {
-      id:"ashok-ecomet-1215", name:"Ashok Leyland Ecomet 1215", make:"Ashok Leyland", segment:"Medium Duty", fuel:"Diesel", drive:"4x2",
-      payloadT: 7.5, gvwrT: 12.9, powerHP:150, torqueNm:450, rangeKm: 650, efficiency:"~5.5 km/l", transmission:"Manual",
-      rating: 4.0, price:"₹20–23L",
-      pros:["City-friendly with tight turning radius","Durable aggregates","Competitive maintenance cost"],
-      cons:["Cab insulation average","Feature set is basic"],
-      notes:"Common for regional logistics and e‑commerce distribution.",
-    },
-    {
-      id:"bharatbenz-1217c", name:"BharatBenz 1217C Tipper", make:"BharatBenz", segment:"Tipper / Construction", fuel:"Diesel", drive:"4x2",
-      payloadT: 7.0, gvwrT: 13.0, powerHP:170, torqueNm:520, rangeKm: 450, efficiency:"~3.2 km/l", transmission:"Manual",
-      rating: 4.3, price:"₹24–28L",
-      pros:["Strong build for construction duty","Good braking performance","Reliable powertrain"],
-      cons:["Fuel efficiency depends heavily on load cycle","Cab comfort average"],
-      notes:"Designed for construction/aggregate transport with reinforced body.",
-    },
-    {
-      id:"mahindra-bolero-pikup", name:"Mahindra Bolero Pik‑Up", make:"Mahindra", segment:"Pickup / Light", fuel:"Diesel", drive:"4x2",
-      payloadT: 1.7, gvwrT: 3.5, powerHP:75, torqueNm:200, rangeKm: 700, efficiency:"~13 km/l", transmission:"Manual",
-      rating: 4.1, price:"₹9–10.5L",
-      pros:["Excellent payload for price","Rugged for rural roads","Easy/cheap spares"],
-      cons:["Basic safety/comfort features","NVH at highway speeds"],
-      notes:"Workhorse for MSMEs, farms, and last‑mile logistics.",
-    },
-    {
-      id:"isuzu-dmax", name:"Isuzu D‑Max S‑Cab", make:"Isuzu", segment:"Pickup / Light", fuel:"Diesel", drive:"4x2",
-      payloadT: 1.2, gvwrT: 3.0, powerHP:78, torqueNm:176, rangeKm: 720, efficiency:"~14 km/l", transmission:"Manual",
-      rating: 4.0, price:"₹13–15L",
-      pros:["Car-like driving manners","Reliable diesel engine","Good build quality"],
-      cons:["Fewer service points than domestic brands","Costlier parts"],
-      notes:"Popular among fleet buyers needing comfort & reliability.",
-    },
-    {
-      id:"volvo-fm-420", name:"Volvo FM 420 6x2", make:"Volvo", segment:"Heavy Duty", fuel:"Diesel", drive:"6x2",
-      payloadT: 26.0, gvwrT: 44.0, powerHP:420, torqueNm:2100, rangeKm: 1200, efficiency:"~2.8 km/l", transmission:"Automated Manual",
-      rating: 4.6, price:"₹1.3–1.6Cr",
-      pros:["High safety & comfort","Powerful & efficient engine","Excellent uptime with telematics"],
-      cons:["High acquisition cost","Requires trained drivers"],
-      notes:"Often used for long-haul heavy applications; multiple axle configs.",
-    },
-    {
-      id:"scania-r500", name:"Scania R500", make:"Scania", segment:"Tractor Trailer", fuel:"Diesel", drive:"6x4",
-      payloadT: 35.0, gvwrT: 55.0, powerHP:500, torqueNm:2550, rangeKm: 1300, efficiency:"~2.6 km/l", transmission:"Automated Manual",
-      rating: 4.7, price:"~₹2Cr+ (import)",
-      pros:["Benchmark highway comfort","Strong engine with retarder","Excellent ADAS options"],
-      cons:["Very expensive","Limited dealer coverage in India"],
-      notes:"Flagship tractor known for efficiency and comfort; availability varies.",
-    },
-    {
-      id:"freightliner-cascadia", name:"Freightliner Cascadia", make:"Freightliner", segment:"Tractor Trailer", fuel:"Diesel", drive:"6x4",
-      payloadT: 36.0, gvwrT: 59.0, powerHP:400, torqueNm:2050, rangeKm: 1600, efficiency:"~3.0 km/l (US mpg eq)", transmission:"Automated Manual",
-      rating: 4.5, price:"US$140k+ (market)",
-      pros:["Aerodynamic design","Mature driver assistance","Large sleeper options"],
-      cons:["US‑centric configs","Left‑hand drive in most markets"],
-      notes:"North American highway tractor; listed for global perspective.",
-    },
-    {
-      id:"mercedes-actros", name:"Mercedes‑Benz Actros", make:"Mercedes‑Benz", segment:"Heavy Duty", fuel:"Diesel", drive:"6x2",
-      payloadT: 27.0, gvwrT: 44.0, powerHP:450, torqueNm:2200, rangeKm: 1400, efficiency:"~3.1 km/l", transmission:"Automated Manual",
-      rating: 4.6, price:"€110k+ (EU)",
-      pros:["Strong safety tech (MirrorCam/ADAS)","Comfortable cabin","Efficient powertrains"],
-      cons:["High cost","Complex electronics for rural ops"],
-      notes:"Widely used in EU long‑haul; advanced digital mirrors in newer gens.",
-    },
-    {
-      id:"omega-seiki-sona", name:"Omega Seiki M1 (Concept)", make:"Omega Seiki", segment:"Medium Duty", fuel:"Electric", drive:"4x2",
-      payloadT: 3.0, gvwrT: 7.5, powerHP:180, torqueNm:900, rangeKm: 250, efficiency:"n/a", transmission:"Single‑speed",
-      rating: 3.6, price:"TBD",
-      pros:["Zero tailpipe emissions","Lower running cost","Quieter in city"],
-      cons:["Charging infra still limited","Higher upfront cost"],
-      notes:"Represents emerging mid‑duty EVs in India; specs indicative.",
-    },
-  ];
-
-  // Persist user-added trucks
-  const LS_KEY = 'truck-dashboard-custom';
-  const loadCustom = () => JSON.parse(localStorage.getItem(LS_KEY)||'[]');
-  const saveCustom = (arr) => localStorage.setItem(LS_KEY, JSON.stringify(arr));
-
-  // ---------------------- State & Elements ----------------------
-  const els = {
-    q: document.getElementById('q'), segment: document.getElementById('segment'), fuel: document.getElementById('fuel'), drive: document.getElementById('drive'), sort: document.getElementById('sort'),
-    cards: document.getElementById('cards'), empty: document.getElementById('empty'), kpis: document.getElementById('kpis'),
-    exportCsv: document.getElementById('exportCsv'), reset: document.getElementById('reset'),
-    addTruck: document.getElementById('addTruck'), newName: document.getElementById('newName'), newPayload: document.getElementById('newPayload'), newSegment: document.getElementById('newSegment'), newFuel: document.getElementById('newFuel'),
-    compareBar: document.getElementById('compareBar'), comparePills: document.getElementById('comparePills'), compareBtn: document.getElementById('compareBtn'),
-  };
-  let selected = new Set();
-
-  function getAllTrucks(){
-    return [...baseTrucks, ...loadCustom()];
-  }
-
-  // ---------------------- Render ----------------------
-  function render(){
-    const all = getAllTrucks();
-    let list = all.filter(t => {
-      const q = els.q.value.trim().toLowerCase();
-      const seg = els.segment.value; const fuel = els.fuel.value; const drive = els.drive.value;
-      const hit = !q || (t.name + ' ' + t.make + ' ' + (t.notes||'')).toLowerCase().includes(q);
-      const segOk = !seg || t.segment === seg;
-      const fuelOk = !fuel || t.fuel === fuel;
-      const driveOk = !drive || t.drive === drive;
-      return hit && segOk && fuelOk && driveOk;
-    });
-
-    // sort
-    const [key, dir] = els.sort.value.split('-');
-    const dirMul = dir === 'desc' ? -1 : 1;
-    list.sort((a,b)=>{
-      const val = (k) => ({
-        'rating': x=>x.rating,
-        'payload': x=>x.payloadT,
-        'range': x=>x.rangeKm,
-        'name': x=>x.name.toLowerCase(),
-      }[k])(k==='name'?{...a}:{...a});
-      return (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * dirMul;
-    });
-
-    // KPIs
-    const avg = (arr, f)=> arr.length? (arr.reduce((s,x)=>s+f(x),0)/arr.length):0;
-    const kpis = [
-      {k:'Total', v: list.length},
-      {k:'Avg Payload (t)', v: avg(list, x=>x.payloadT||0).toFixed(1)},
-      {k:'Avg Range (km)', v: Math.round(avg(list, x=>x.rangeKm||0))},
-      {k:'Avg Rating', v: avg(list, x=>x.rating||0).toFixed(2)},
+    // Sample data for trucks
+    const trucks = [
+      {
+        id: 'volvo-fh',
+        name: 'Volvo FH',
+        manufacturer: 'Volvo',
+        image: 'https://images.unsplash.com/photo-1591840431233-1c3d3d6c8a2e?auto=format&fit=crop&w=1200&q=70',
+        overview: 'High-comfort long-haul truck with excellent fuel economy and safety features.',
+        pros: ['Comfortable cabin', 'Advanced safety systems', 'Good fuel efficiency'],
+        cons: ['Higher purchase price', 'Costly spare parts'],
+        specs: {power: '460 hp', torque: '2300 Nm', payload: '25,000 kg'}
+      },
+      {
+        id: 'scania-r',
+        name: 'Scania R-Series',
+        manufacturer: 'Scania',
+        image: 'https://images.unsplash.com/photo-1558981285-61b2be1d4b4a?auto=format&fit=crop&w=1200&q=70',
+        overview: 'A reliable heavy-duty truck with modular components and strong performance.',
+        pros: ['Modular design', 'Powerful engines', 'Driver-friendly'],
+        cons: ['Heavier maintenance needs', 'Higher service costs in some regions'],
+        specs: {power: '500 hp', torque: '2500 Nm', payload: '27,000 kg'}
+      },
+      {
+        id: 'actros',
+        name: 'Mercedes-Benz Actros',
+        manufacturer: 'Mercedes-Benz',
+        image: 'https://images.unsplash.com/photo-1558980664-10b6f7f0a799?auto=format&fit=crop&w=1200&q=70',
+        overview: 'Tech-forward truck with great driver ergonomics and efficient drivetrains.',
+        pros: ['High-tech features', 'Comfortable cabin', 'Efficient driveline'],
+        cons: ['Initial cost', 'Electronics can be complex'],
+        specs: {power: '480 hp', torque: '2400 Nm', payload: '26,000 kg'}
+      },
+      {
+        id: 'tata-signa',
+        name: 'Tata Signa',
+        manufacturer: 'Tata',
+        image: 'https://images.unsplash.com/photo-1563729784472-3d2f9f6a4a2f?auto=format&fit=crop&w=1200&q=70',
+        overview: 'Cost-effective and widely supported heavy truck popular in India and nearby markets.',
+        pros: ['Low initial cost', 'Wide service network', 'Robust design'],
+        cons: ['Lower cabin comfort', 'Less fuel-efficient compared to premium rivals'],
+        specs: {power: '330 hp', torque: '1400 Nm', payload: '18,000 kg'}
+      },
+      {
+        id: 'ashok-falcon',
+        name: 'Ashok Leyland Falcon',
+        manufacturer: 'Ashok Leyland',
+        image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=70',
+        overview: 'Local heavy-duty truck designed for rugged conditions and high payloads.',
+        pros: ['Rugged build', 'Good for rough roads', 'Affordable maintenance'],
+        cons: ['Basic cabin features', 'Lower resale in some markets'],
+        specs: {power: '375 hp', torque: '1600 Nm', payload: '20,000 kg'}
+      }
     ];
-    els.kpis.innerHTML = kpis.map(k=>`<div class="kpi"><h3>${k.k}</h3><div class="val">${k.v}</div></div>`).join('');
 
-    // Cards
-    els.cards.innerHTML = list.map(t=>cardHTML(t)).join('');
-    els.empty.style.display = list.length? 'none':'block';
-
-    // Restore selected state on rerender
-    document.querySelectorAll('[data-sel]').forEach(el=>{
-      const id = el.getAttribute('data-sel');
-      if(selected.has(id)) el.classList.add('primary');
+    // Populate filter options
+    const manufacturers = Array.from(new Set(trucks.map(t=>t.manufacturer)));
+    const filter = document.getElementById('filter');
+    manufacturers.forEach(m=>{
+      const opt = document.createElement('option'); opt.value = m; opt.textContent = m; filter.appendChild(opt);
     });
-  }
 
-  function cardHTML(t){
-    const tags = [t.segment, t.fuel, t.drive, t.transmission].filter(Boolean);
-    return `
-      <article class="card">
-        <div class="card-hero">
-          <span class="badge">${t.make}</span>
-          <div>
-            <div class="title">${t.name}</div>
-            <div class="subtitle">${t.segment} • ${t.fuel} • ${t.drive}</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="chips">${tags.map(x=>`<span class="chip">${x}</span>`).join('')}</div>
-          <div class="row" style="gap:12px">
-            <div style="flex:1">
-              <div class="muted">Payload</div>
-              <div><strong>${t.payloadT ?? '–'}</strong> t</div>
-            </div>
-            <div style="flex:1">
-              <div class="muted">Range</div>
-              <div><strong>${t.rangeKm ?? '–'}</strong> km</div>
-            </div>
-            <div style="flex:1">
-              <div class="muted">Rating</div>
-              <div>⭐ ${t.rating?.toFixed(1) ?? '–'}</div>
-            </div>
-          </div>
-          <div class="pros">${(t.pros||[]).slice(0,2).map(p=>`<div class="li good">${p}</div>`).join('')}</div>
-          <div class="cons">${(t.cons||[]).slice(0,1).map(c=>`<div class="li bad">${c}</div>`).join('')}</div>
-        </div>
-        <div class="card-foot">
-          <button class="btn" onclick='openDetails(${JSON.stringify(t).replace(/'/g, "&apos;")})'>Details</button>
-          <button class="btn" onclick='copySummary(${JSON.stringify(t).replace(/'/g, "&apos;")})'>Copy summary</button>
-          <button class="btn" data-sel="${t.id}" onclick='toggleCompare("${t.id}")'>Compare</button>
-        </div>
-      </article>
-    `;
-  }
+    const truckList = document.getElementById('truckList');
+    const detailPanel = document.getElementById('detailPanel');
+    const title = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+    const tags = document.getElementById('tags');
+    const specs = document.getElementById('specs');
+    const overview = document.getElementById('overview');
+    const prosEl = document.getElementById('pros');
+    const consEl = document.getElementById('cons');
+    const mainImage = document.getElementById('mainImage');
 
-  // ---------------------- Details Modal ----------------------
-  const m = {
-    wrap: document.getElementById('modal'), mTitle: document.getElementById('mTitle'), mSub: document.getElementById('mSub'), mNotes: document.getElementById('mNotes'), mSpecs: document.getElementById('mSpecs'), mPros: document.getElementById('mPros'), mCons: document.getElementById('mCons')
-  };
-  function openDetails(t){
-    m.mTitle.textContent = t.name;
-    m.mSub.textContent = `${t.segment} • ${t.fuel} • ${t.drive}`;
-    m.mNotes.textContent = t.notes || '';
-    const specs = [
-      ['Make', t.make], ['Transmission', t.transmission], ['Payload (t)', t.payloadT], ['GVW/GCW (t)', t.gvwrT], ['Power (hp)', t.powerHP], ['Torque (Nm)', t.torqueNm], ['Range (km)', t.rangeKm], ['Efficiency', t.efficiency], ['Price (guide)', t.price], ['Rating', `⭐ ${t.rating?.toFixed(1)}`]
-    ];
-    m.mSpecs.innerHTML = specs.map(([k,v])=>`<div class="spec"><div class="k">${k}</div><div class="v">${v ?? '–'}</div></div>`).join('');
-    m.mPros.innerHTML = (t.pros||[]).map(p=>`<div class="li good">${p}</div>`).join('');
-    m.mCons.innerHTML = (t.cons||[]).map(c=>`<div class="li bad">${c}</div>`).join('');
-    m.wrap.classList.add('open');
-  }
-  function closeModal(){ m.wrap.classList.remove('open'); }
-  m.wrap.addEventListener('click', (e)=>{ if(e.target===m.wrap) closeModal(); });
+    let activeId = null;
 
-  // ---------------------- Compare ----------------------
-  function toggleCompare(id){
-    if(selected.has(id)) selected.delete(id); else selected.add(id);
-    updateCompareBar();
-    document.querySelectorAll(`[data-sel="${id}"]`).forEach(b=>b.classList.toggle('primary'));
-  }
-  function updateCompareBar(){
-    const pills = Array.from(selected).map(id=>{
-      const t = getAllTrucks().find(x=>x.id===id); if(!t) return '';
-      return `<span class="pill">${t.name} <span style="opacity:.7">(${t.payloadT}t)</span></span>`;
-    }).join('');
-    els.comparePills.innerHTML = pills;
-    document.getElementById('compareBar').classList.toggle('open', selected.size>0);
-  }
-  els.compareBtn.addEventListener('click', ()=>{
-    const data = Array.from(selected).map(id=>getAllTrucks().find(x=>x.id===id)).filter(Boolean);
-    if(!data.length) return;
-    const headers = ['Name','Segment','Fuel','Drive','Payload (t)','Range (km)','Power (hp)','Torque (Nm)','Rating'];
-    const rows = data.map(t=>[t.name,t.segment,t.fuel,t.drive,t.payloadT,t.rangeKm,t.powerHP,t.torqueNm,t.rating]);
-    const table = `<div class="sheet" style="width:min(1100px,95vw)"><header><div class="title">Compare (${data.length})</div><button class="btn" onclick="this.closest('.modal').remove()">Close</button></header><div class="content"><div style="overflow:auto"><table style="border-collapse:separate; border-spacing:0; width:100%">
-      <thead>${headers.map(h=>`<th style=\"text-align:left; position:sticky; top:0; background:var(--panel); padding:10px; border-bottom:1px solid var(--border)\">${h}</th>`).join('')}</thead>
-      <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td style=\"padding:10px; border-bottom:1px solid var(--border)\">${c ?? '–'}</td>`).join('')}</tr>`).join('')}</tbody>
-    </table></div></div></div>`;
-    const modal = document.createElement('div'); modal.className='modal open'; modal.innerHTML = table; document.body.appendChild(modal);
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.remove(); });
-  });
+    function createCard(truck){
+      const card = document.createElement('div'); card.className='truck-card'; card.dataset.id=truck.id;
+      const thumb = document.createElement('div'); thumb.className='truck-thumb';
+      const img = document.createElement('img'); img.src = truck.image; img.alt = truck.name; thumb.appendChild(img);
+      const meta = document.createElement('div'); meta.className='truck-meta';
+      const h3 = document.createElement('h3'); h3.textContent = truck.name; const p = document.createElement('p'); p.textContent = truck.manufacturer;
+      meta.appendChild(h3); meta.appendChild(p);
+      card.appendChild(thumb); card.appendChild(meta);
 
-  // ---------------------- Utilities ----------------------
-  function copySummary(t){
-    const text = `${t.name} — ${t.segment}, ${t.fuel}, ${t.drive}\nPayload: ${t.payloadT} t; Range: ${t.rangeKm} km; Power: ${t.powerHP} hp; Torque: ${t.torqueNm} Nm; Transmission: ${t.transmission}\nPros: ${t.pros?.join('; ')}\nCons: ${t.cons?.join('; ')}\nNotes: ${t.notes}`;
-    navigator.clipboard.writeText(text).then(()=>{
-      toast('Copied summary to clipboard');
+      card.addEventListener('click', ()=> selectTruck(truck.id));
+      // enable drag for quick compare
+      card.draggable = true;
+      card.addEventListener('dragstart', (ev)=>{ ev.dataTransfer.setData('text/plain', truck.id); });
+
+      return card;
+    }
+
+    function renderList(list){
+      truckList.innerHTML='';
+      list.forEach(t=> truckList.appendChild(createCard(t)));
+    }
+
+    function selectTruck(id){
+      activeId = id;
+      const t = trucks.find(x=>x.id===id);
+      if(!t) return;
+      // mark active
+      document.querySelectorAll('.truck-card').forEach(c=> c.classList.toggle('active', c.dataset.id===id));
+      // fill details
+      title.textContent = t.name;
+      subtitle.textContent = t.manufacturer;
+      tags.innerHTML = '';
+      const tagA = document.createElement('div'); tagA.className='tag'; tagA.textContent = t.manufacturer; tags.appendChild(tagA);
+      const tagB = document.createElement('div'); tagB.className='tag'; tagB.textContent = t.specs.power + ' / ' + t.specs.torque; tags.appendChild(tagB);
+
+      specs.innerHTML='';
+      for(const [k,v] of Object.entries(t.specs)){
+        const s = document.createElement('div'); s.className='spec'; s.innerHTML=`<h4>${k.toUpperCase()}</h4><p>${v}</p>`; specs.appendChild(s);
+      }
+
+      overview.textContent = t.overview;
+
+      prosEl.innerHTML=''; t.pros.forEach(p=>{ const d=document.createElement('div'); d.className='chip'; d.textContent=p; prosEl.appendChild(d); });
+      consEl.innerHTML=''; t.cons.forEach(c=>{ const d=document.createElement('div'); d.className='chip'; d.textContent=c; consEl.appendChild(d); });
+
+      mainImage.innerHTML = '';
+      const img = document.createElement('img'); img.src = t.image; img.alt = t.name; mainImage.appendChild(img);
+    }
+
+    // Search & filter
+    document.getElementById('search').addEventListener('input', (e)=> applyFilters());
+    document.getElementById('filter').addEventListener('change', (e)=> applyFilters());
+    document.getElementById('reset').addEventListener('click', ()=>{ document.getElementById('search').value=''; document.getElementById('filter').value='all'; applyFilters(); });
+
+    function applyFilters(){
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const f = document.getElementById('filter').value;
+      let list = trucks.filter(t=>{
+        const matchesQ = !q || t.name.toLowerCase().includes(q) || t.manufacturer.toLowerCase().includes(q);
+        const matchesF = f==='all' || t.manufacturer===f;
+        return matchesQ && matchesF;
+      });
+      renderList(list);
+      // if the active item was filtered out, clear detail
+      if(activeId && !list.find(x=>x.id===activeId)){
+        activeId = null; title.textContent='Select a truck'; subtitle.textContent=''; tags.innerHTML=''; specs.innerHTML=''; overview.textContent='Choose a truck from the left to see details.'; prosEl.innerHTML=''; consEl.innerHTML=''; mainImage.innerHTML='';
+      }
+    }
+
+    // Quick Compare: drag & drop into compare slots
+    const cmpA = document.getElementById('cmpA');
+    const cmpB = document.getElementById('cmpB');
+    [cmpA, cmpB].forEach(slot=>{
+      slot.addEventListener('dragover', (ev)=>{ ev.preventDefault(); slot.style.background = 'rgba(255,255,255,0.01)'; });
+      slot.addEventListener('dragleave', ()=>{ slot.style.background = 'transparent'; });
+      slot.addEventListener('drop', (ev)=>{
+        ev.preventDefault(); slot.style.background = 'transparent'; const id = ev.dataTransfer.getData('text/plain'); const t = trucks.find(x=>x.id===id); if(!t) return; slot.innerHTML = `<strong>${t.name}</strong><div style="margin-top:8px;color:var(--muted)">${t.manufacturer}</div><div style="margin-top:8px;font-size:13px">${t.specs.power} | ${t.specs.torque} | ${t.specs.payload}</div>`;
+      });
     });
-  }
 
-  function toast(msg){
-    const el = document.createElement('div');
-    el.textContent = msg; el.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:rgba(15,23,42,.92); border:1px solid var(--border); padding:10px 14px; border-radius:12px; box-shadow:var(--shadow); z-index:99';
-    document.body.appendChild(el); setTimeout(()=>el.remove(), 1600);
-  }
+    // Initial render
+    renderList(trucks);
 
-  function exportCSV(rows){
-    const csv = rows.map(r => r.map(x => '"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\n');
-    const blob = new Blob([csv], {type: 'text/csv'}); const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download='trucks.csv'; a.click(); URL.revokeObjectURL(url);
-  }
+    // Auto-select the first truck
+    if(trucks.length) selectTruck(trucks[0].id);
 
-  // ---------------------- Events ----------------------
-  ['input','change'].forEach(evt=>{
-    els.q.addEventListener(evt, render); els.segment.addEventListener(evt, render); els.fuel.addEventListener(evt, render); els.drive.addEventListener(evt, render); els.sort.addEventListener(evt, render);
-  });
-  els.reset.addEventListener('click', ()=>{ els.q.value=''; els.segment.value=''; els.fuel.value=''; els.drive.value=''; els.sort.value='rating-desc'; render(); });
-
-  els.exportCsv.addEventListener('click', ()=>{
-    const list = Array.from(document.querySelectorAll('.card .title')).map((_,i)=>i); // placeholder to force recompute
-    const filtered = getAllTrucks().filter(t=>{
-      const q = els.q.value.trim().toLowerCase();
-      const seg = els.segment.value; const fuel = els.fuel.value; const drive = els.drive.value;
-      const hit = !q || (t.name + ' ' + t.make + ' ' + (t.notes||'')).toLowerCase().includes(q);
-      const segOk = !seg || t.segment === seg;
-      const fuelOk = !fuel || t.fuel === fuel;
-      const driveOk = !drive || t.drive === drive;
-      return hit && segOk && fuelOk && driveOk;
+    // Keyboard accessibility: navigate list
+    document.addEventListener('keydown', (e)=>{
+      const visible = Array.from(document.querySelectorAll('.truck-card'));
+      if(!visible.length) return;
+      const idx = visible.findIndex(c=> c.dataset.id===activeId);
+      if(e.key==='ArrowDown'){ e.preventDefault(); const next = visible[Math.min(visible.length-1, Math.max(0, idx+1))]; if(next) selectTruck(next.dataset.id); }
+      if(e.key==='ArrowUp'){ e.preventDefault(); const prev = visible[Math.max(0, Math.min(visible.length-1, idx-1))]; if(prev) selectTruck(prev.dataset.id); }
     });
-    const rows = [
-      ['Name','Make','Segment','Fuel','Drive','Payload (t)','GVW/GCW (t)','Power (hp)','Torque (Nm)','Range (km)','Efficiency','Transmission','Rating','Price','Notes'],
-      ...filtered.map(t=>[t.name,t.make,t.segment,t.fuel,t.drive,t.payloadT,t.gvwrT,t.powerHP,t.torqueNm,t.rangeKm,t.efficiency,t.transmission,t.rating,t.price,t.notes])
-    ];
-    exportCSV(rows);
-  });
 
-  els.addTruck.addEventListener('click', ()=>{
-    const n = els.newName.value.trim(); const p = parseFloat(els.newPayload.value); const s = els.newSegment.value.trim()||'Custom'; const f = els.newFuel.value.trim()||'Diesel';
-    if(!n || isNaN(p)) return toast('Enter name and numeric payload');
-    const c = loadCustom();
-    const id = n.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40) + '-' + Math.random().toString(36).slice(2,7);
-    c.push({id,name:n,make:n.split(' ')[0],segment:s,fuel:f,drive:'4x2',payloadT:p,gvwrT:undefined,powerHP:undefined,torqueNm:undefined,rangeKm:undefined,efficiency:undefined,transmission:'Manual',rating:3.5,price:'–',pros:['Custom entry'],cons:[],notes:'User‑added'});
-    saveCustom(c); els.newName.value=''; els.newPayload.value=''; render(); toast('Added custom truck');
-  });
+    // Small utility: allow replacing data with JSON paste
+    window.loadJson = function(json){ try{ const data = JSON.parse(json); if(Array.isArray(data)){ trucks.length=0; data.forEach(d=>trucks.push(d)); applyFilters(); alert('Loaded '+data.length+' trucks'); } else alert('JSON must be an array of truck objects'); }catch(err){ alert('Invalid JSON: '+err.message); } }
 
-  // Keyboard: Cmd/Ctrl+K focus search
-  document.addEventListener('keydown', (e)=>{
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); els.q.focus(); els.q.select(); }
-  });
-
-  // ---------------------- Init ----------------------
-  render();
+    // End of script
   </script>
 </body>
 </html>
