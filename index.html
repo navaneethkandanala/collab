@@ -74,10 +74,11 @@
                     </div>
                 </div>
                 <!-- Shopping Cart Button -->
-                <button aria-label="Shopping Cart" class="p-2 text-gray-600 hover:text-blue-500 rounded-full hover:bg-gray-100 transition duration-300">
+                <button id="cart-button" aria-label="Shopping Cart" class="relative p-2 text-gray-600 hover:text-blue-500 rounded-full hover:bg-gray-100 transition duration-300">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
+                    <span id="cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
                 </button>
                 <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
                     Order Now
@@ -129,7 +130,7 @@
                         Creamy, rich, and full of natural goodness. Perfect for the whole family.
                     </p>
                     <p class="text-2xl font-bold text-blue-600 mb-4">₹331</p>
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    <button class="add-to-cart-btn bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300" data-name="Whole Milk" data-price="331">
                         Add to Cart
                     </button>
                 </div>
@@ -141,7 +142,7 @@
                         A light and refreshing option, with all the essential nutrients and no fat.
                     </p>
                     <p class="text-2xl font-bold text-blue-600 mb-4">₹289</p>
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    <button class="add-to-cart-btn bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300" data-name="Skim Milk" data-price="289">
                         Add to Cart
                     </button>
                 </div>
@@ -153,7 +154,7 @@
                         Tangy and smooth yogurt with real fruit chunks. A perfect snack.
                     </p>
                     <p class="text-2xl font-bold text-blue-600 mb-4">₹231</p>
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    <button class="add-to-cart-btn bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300" data-name="Flavored Yogurt" data-price="231">
                         Add to Cart
                     </button>
                 </div>
@@ -393,6 +394,30 @@
             <p>&copy; 2025 THE DAILY DAIRY CO. All rights reserved.</p>
         </footer>
     </div>
+    
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md md:max-w-lg relative">
+            <button id="close-cart-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Your Cart</h2>
+            <div id="cart-items" class="max-h-80 overflow-y-auto mb-4">
+                <!-- Cart items will be rendered here by JavaScript -->
+                <p id="empty-cart-message" class="text-center text-gray-500">Your cart is empty.</p>
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-bold text-gray-800">Total:</span>
+                    <span id="cart-total" class="text-xl font-bold text-blue-600">₹0</span>
+                </div>
+                <button class="w-full bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- JavaScript for the animated order tracker chat and search functionality -->
     <script>
@@ -458,6 +483,124 @@
                     }
                 });
             });
+
+            // Shopping Cart Functionality
+            const cartButton = document.getElementById('cart-button');
+            const cartModal = document.getElementById('cart-modal');
+            const closeCartBtn = document.getElementById('close-cart-btn');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const cartCountElement = document.getElementById('cart-count');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+
+            let cart = [];
+
+            // Function to update the cart display
+            function updateCartDisplay() {
+                cartItemsContainer.innerHTML = '';
+                let total = 0;
+                let itemCount = 0;
+                
+                if (cart.length === 0) {
+                    emptyCartMessage.style.display = 'block';
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                    cart.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'flex items-center justify-between p-2 mb-2 bg-gray-50 rounded-lg shadow-sm';
+                        
+                        itemElement.innerHTML = `
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                                <span class="text-sm text-gray-600">₹${item.price}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="decrement-btn text-blue-500 hover:text-blue-700 font-bold text-lg leading-none" data-name="${item.name}">-</button>
+                                <span class="text-sm font-semibold">${item.quantity}</span>
+                                <button class="increment-btn text-blue-500 hover:text-blue-700 font-bold text-lg leading-none" data-name="${item.name}">+</button>
+                                <button class="remove-from-cart-btn text-red-500 hover:text-red-700 transition duration-300" data-name="${item.name}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        `;
+                        cartItemsContainer.appendChild(itemElement);
+                        total += item.price * item.quantity;
+                        itemCount += item.quantity;
+                    });
+                }
+                
+                cartTotalElement.textContent = `₹${total}`;
+                cartCountElement.textContent = itemCount;
+            }
+
+            // Function to add a product to the cart
+            function addToCart(productName, productPrice) {
+                const existingItem = cart.find(item => item.name === productName);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ name: productName, price: productPrice, quantity: 1 });
+                }
+                updateCartDisplay();
+            }
+
+            // Event delegation for "Add to Cart" buttons
+            productGrid.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.classList.contains('add-to-cart-btn')) {
+                    const productName = target.dataset.name;
+                    const productPrice = parseInt(target.dataset.price);
+                    addToCart(productName, productPrice);
+                }
+            });
+
+            // Event delegation for cart item buttons (increment, decrement, remove)
+            cartItemsContainer.addEventListener('click', (e) => {
+                const target = e.target.closest('button');
+                if (!target) return;
+
+                const productName = target.dataset.name;
+
+                if (target.classList.contains('remove-from-cart-btn')) {
+                    cart = cart.filter(item => item.name !== productName);
+                    updateCartDisplay();
+                } else if (target.classList.contains('decrement-btn')) {
+                    const item = cart.find(item => item.name === productName);
+                    if (item && item.quantity > 1) {
+                        item.quantity--;
+                        updateCartDisplay();
+                    } else if (item && item.quantity === 1) {
+                         // If quantity is 1 and user decrements, remove the item
+                        cart = cart.filter(item => item.name !== productName);
+                        updateCartDisplay();
+                    }
+                } else if (target.classList.contains('increment-btn')) {
+                    const item = cart.find(item => item.name === productName);
+                    if (item) {
+                        item.quantity++;
+                        updateCartDisplay();
+                    }
+                }
+            });
+            
+            // Show/Hide Cart Modal
+            cartButton.addEventListener('click', () => {
+                cartModal.classList.remove('hidden');
+            });
+
+            closeCartBtn.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+            });
+            
+            // Close modal when clicking outside of it
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.classList.add('hidden');
+                }
+            });
+            
+            // Initial cart display update
+            updateCartDisplay();
         });
     </script>
 
