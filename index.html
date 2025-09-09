@@ -1,470 +1,420 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Truck Info Dashboard</title>
-  <style>
-    :root{
-      --bg:#0f172a;        /* slate-900 */
-      --card:#0b1220;      /* darker panel */
-      --muted:#94a3b8;     /* muted text */
-      --accent:#06b6d4;    /* cyan */
-      --glass: rgba(255,255,255,0.03);
-      --radius:12px;
-      --max-width:1200px;
-      --gap:18px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color-scheme: dark;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071029 0%, #081226 60%);color:#e6eef6}
-    .wrap{max-width:var(--max-width);margin:28px auto;padding:20px;}
-
-    header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
-
-    .topbar{display:flex;gap:12px;align-items:center;margin-top:14px}
-    .search{flex:1;display:flex}
-    input[type=search]{flex:1;padding:10px 12px;border-radius:10px;border:0;background:var(--glass);color:inherit}
-    select,button{padding:10px 12px;border-radius:10px;border:0;background:var(--card);color:inherit}
-    button.primary{background:linear-gradient(90deg,var(--accent),#7c3aed);box-shadow:0 6px 20px rgba(7,18,36,0.45);}
-
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:var(--gap);align-items:start}
-
-    /* Left main */
-    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:14px;border-radius:var(--radius);box-shadow:0 6px 20px rgba(2,6,23,0.6)}
-    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{padding:8px 10px;border-radius:999px;background:var(--glass);cursor:pointer;font-size:13px}
-
-    table{width:100%;border-collapse:collapse}
-    thead th{font-size:12px;text-align:left;padding:10px 8px;color:var(--muted)}
-    tbody td{padding:10px 8px;border-top:1px solid rgba(255,255,255,0.03)}
-    .truck-name{font-weight:600}
-    .small{font-size:12px;color:var(--muted)}
-
-    /* Right sidebar */
-    .sidebar .card{margin-bottom:12px}
-    .card{background:var(--card);padding:12px;border-radius:12px}
-    .card h3{margin:0 0 8px 0}
-
-    /* cards grid */
-    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px}
-    .truck-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
-    .truck-card h4{margin:0 0 6px 0}
-    .badge{display:inline-block;padding:6px 8px;border-radius:8px;font-size:12px}
-
-    /* modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;padding:20px}
-    .modal{max-width:900px;width:100%;background:linear-gradient(180deg,#061224,#071831);padding:18px;border-radius:12px}
-    .modal .row{display:flex;gap:12px}
-    .specs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-    .spec{background:var(--glass);padding:8px;border-radius:8px}
-
-    footer{margin-top:18px;color:var(--muted);font-size:13px}
-
-    /* responsive */
-    @media (max-width:980px){
-      .grid{grid-template-columns:1fr}
-      .logo{width:48px;height:48px}
-    }
-
-    /* small helpers */
-    .muted{color:var(--muted)}
-    .flex{display:flex;align-items:center}
-    .gap{gap:8px}
-    .center{justify-content:center}
-
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo">TD</div>
-        <div>
-          <h1>Truck Dashboard</h1>
-          <p class="lead">Compare trucks, see pros & cons, and pick what fits your needs.</p>
-        </div>
-      </div>
-      <div style="margin-left:auto" class="muted">v1.0 • Lightweight single-file demo</div>
-    </header>
-
-    <div class="topbar">
-      <div class="search">
-        <input id="query" type="search" placeholder="Search trucks by name, use, or feature..." />
-        <button id="clearSearch">Clear</button>
-      </div>
-      <select id="filterType">
-        <option value="all">All Types</option>
-        <option value="haul">Haul</option>
-        <option value="dump">Dump</option>
-        <option value="box">Box</option>
-        <option value="flatbed">Flatbed</option>
-      </select>
-      <select id="sortBy">
-        <option value="name">Sort: Name</option>
-        <option value="capacity-desc">Capacity ↓</option>
-        <option value="capacity-asc">Capacity ↑</option>
-      </select>
-      <button class="primary" id="exportCsv">Export CSV</button>
-    </div>
-
-    <main class="grid">
-      <section>
-        <div class="panel">
-          <div class="controls">
-            <div class="chips" id="featuresChips"></div>
-          </div>
-
-          <table id="truckTable" aria-label="Truck list">
-            <thead>
-              <tr>
-                <th>Truck</th>
-                <th>Type</th>
-                <th>Capacity</th>
-                <th>Pros</th>
-                <th>Cons</th>
-                <th class="small">Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-
-          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
-            <div class="muted">Showing <span id="count">0</span> trucks</div>
-            <div style="margin-left:auto" class="small muted">Tip: click a truck name to view details.</div>
-          </div>
-        </div>
-
-        <footer>
-          Built for demo • Data is sample-only • Modify `data` array in JS to add real trucks
-        </footer>
-      </section>
-
-      <aside class="sidebar">
-        <div class="card">
-          <h3>Quick Compare</h3>
-          <p class="small muted">Pick up to 3 trucks to compare side-by-side.</p>
-          <div id="compareList" style="margin-top:10px"></div>
-          <div style="margin-top:10px;display:flex;gap:8px">
-            <button id="clearCompare">Clear</button>
-            <button id="openCompare" class="primary">Open Comparison</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Popular Picks</h3>
-          <div class="cards" id="popularCards"></div>
-        </div>
-
-        <div class="card">
-          <h3>Filters</h3>
-          <div style="margin-top:8px">
-            <label class="small muted">Min capacity (tons)</label>
-            <input id="minCapacity" type="number" min="0" step="0.5" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;background:var(--glass);border:0;color:inherit" />
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <button id="applyCapacity">Apply</button>
-              <button id="resetFilters">Reset</button>
-            </div>
-          </div>
-        </div>
-      </aside>
-    </main>
-
-    <!-- modal -->
-    <div id="modalBackdrop" class="modal-backdrop">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h2 id="modalTitle">Truck Details</h2>
-          <div><button id="closeModal">Close</button></div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <div style="flex:1">
-            <h3 id="dName">Name</h3>
-            <div class="small muted" id="dType">Type</div>
-            <p id="dSummary" class="muted small" style="margin-top:8px"></p>
-
-            <div class="specs" id="dSpecs"></div>
-
-            <h4 style="margin-top:10px">Pros</h4>
-            <ul id="dPros"></ul>
-            <h4>Cons</h4>
-            <ul id="dCons"></ul>
-          </div>
-          <div style="width:380px">
-            <div class="card">
-              <h4>Quick Info</h4>
-              <p class="small muted">Capacity: <strong id="dCap">--</strong></p>
-              <p class="small muted">Fuel Efficiency: <strong id="dFuel">--</strong></p>
-              <p class="small muted">Price (est): <strong id="dPrice">--</strong></p>
-            </div>
-
-            <div class="card" style="margin-top:12px">
-              <h4>User Advice</h4>
-              <p class="small muted" id="dAdvice">--</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- comparison modal -->
-    <div id="compareBackdrop" class="modal-backdrop">
-      <div class="modal">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h2>Compare Trucks</h2>
-          <div><button id="closeCompare">Close</button></div>
-        </div>
-        <div id="compareGrid" style="margin-top:12px;display:grid;grid-auto-flow:column;gap:12px"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    // SAMPLE DATA: edit or extend this array.
-    const data = [
-      {
-        id: 'tk-01', name: 'Atlas Hauler 5000', type: 'haul', capacity: 18, fuel: '6.8 km/l', price: '₹24,00,000',
-        pros: ['High payload', 'Fuel efficient for class', 'Strong resale value'],
-        cons: ['Higher upfront cost', 'Requires skilled driver'],
-        summary: 'Reliable heavy-haul truck for long-distance cargo. Good for highway fleets.',
-        features: ['long-range','comfortable-cabin','cruise-control'],
-        popularity: 92
-      },
-      {
-        id: 'tk-02', name: 'TerraDump T8', type: 'dump', capacity: 12, fuel: '4.5 km/l', price: '₹16,50,000',
-        pros: ['Rugged for construction', 'Easy maintenance'],
-        cons: ['Lower fuel economy', 'Not ideal for long haul'],
-        summary: 'Built for construction site use and short-distance bulk hauling.',
-        features: ['dump-bed','heavy-duty','hydraulic-lift'],
-        popularity: 78
-      },
-      {
-        id: 'tk-03', name: 'CityBox VX', type: 'box', capacity: 3.5, fuel: '10.5 km/l', price: '₹8,20,000',
-        pros: ['Great in-city maneuverability', 'Low running costs'],
-        cons: ['Low payload', 'Limited highway speed comfort'],
-        summary: 'Ideal for last-mile delivery and city logistics.',
-        features: ['compact','low-cost','easy-parking'],
-        popularity: 85
-      },
-      {
-        id: 'tk-04', name: 'FlatMaster 200', type: 'flatbed', capacity: 9, fuel: '7.2 km/l', price: '₹12,00,000',
-        pros: ['Versatile cargo types', 'Simple loading/unloading'],
-        cons: ['Exposed cargo', 'Requires tie-downs'],
-        summary: 'Flexible flatbed designed for varied cargo shapes and quick turns.',
-        features: ['flatbed','versatile','quick-load'],
-        popularity: 64
-      },
-      {
-        id: 'tk-05', name: 'EcoHaul E2', type: 'haul', capacity: 14, fuel: '9.1 km/l', price: '₹18,00,000',
-        pros: ['Excellent fuel efficiency', 'Low emissions'],
-        cons: ['Lower max payload vs heavy class'],
-        summary: 'A fuel-efficient haul truck built for regional distribution.',
-        features: ['eco-mode','fuel-efficient','low-emission'],
-        popularity: 88
-      }
-    ];
-
-    // state
-    let state = {
-      q: '', type: 'all', sort: 'name', minCapacity: 0, selected: new Set(), feature: null
-    };
-
-    // element refs
-    const tbody = document.querySelector('#truckTable tbody');
-    const countEl = document.getElementById('count');
-    const queryInput = document.getElementById('query');
-    const filterType = document.getElementById('filterType');
-    const sortBy = document.getElementById('sortBy');
-    const featuresChips = document.getElementById('featuresChips');
-    const popularCards = document.getElementById('popularCards');
-    const compareList = document.getElementById('compareList');
-
-    // modal
-    const modalBackdrop = document.getElementById('modalBackdrop');
-    const compareBackdrop = document.getElementById('compareBackdrop');
-
-    // utilities
-    function render(){
-      // filter
-      let list = data.filter(t=>{
-        if(state.type !== 'all' && t.type !== state.type) return false;
-        if(t.capacity < state.minCapacity) return false;
-        if(state.feature && !t.features.includes(state.feature)) return false;
-        if(state.q){
-          const q=state.q.toLowerCase();
-          const hay = [t.name,t.type,t.summary,(t.features||[]).join(' ')].join(' ').toLowerCase();
-          if(!hay.includes(q)) return false;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truck Service Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Inter:wght@400;700&display=swap');
+        
+        .font-garamond {
+            font-family: 'Cormorant Garamond', serif;
         }
-        return true;
-      });
 
-      // sort
-      if(state.sort === 'capacity-desc') list.sort((a,b)=>b.capacity - a.capacity);
-      else if(state.sort === 'capacity-asc') list.sort((a,b)=>a.capacity - b.capacity);
-      else list.sort((a,b)=>a.name.localeCompare(b.name));
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .bg-white-card {
+            background-color: #fff;
+        }
+        .shadow-custom {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+        .chat-container {
+            height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #9ca3af #f3f4f6;
+        }
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 10px;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #9ca3af;
+            border-radius: 10px;
+            border: 2px solid #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 flex justify-center">
 
-      // table rows
-      tbody.innerHTML = '';
-      for(const t of list){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>
-            <div class="truck-name"><a href="#" data-id="${t.id}" class="openDetail" style="color:inherit;text-decoration:none">${t.name}</a>
-            <div class="small muted">${t.summary}</div></div>
-          </td>
-          <td class="small">${t.type}</td>
-          <td class="small">${t.capacity} t</td>
-          <td class="small">${t.pros.slice(0,2).join(', ')}</td>
-          <td class="small">${t.cons.slice(0,2).join(', ')}</td>
-          <td class="small"><button data-id="${t.id}" class="addCompare">Compare</button></td>
-        `;
-        tbody.appendChild(tr);
-      }
-
-      countEl.textContent = list.length;
-      renderPopular(list.slice().sort((a,b)=>b.popularity - a.popularity).slice(0,4));
-      renderFeatures();
-      renderCompareList();
-    }
-
-    function renderPopular(list){
-      popularCards.innerHTML = '';
-      for(const t of list){
-        const card = document.createElement('div');
-        card.className='truck-card';
-        card.innerHTML = `
-          <div>
-            <h4>${t.name}</h4>
-            <div class="small muted">${t.type} — ${t.capacity} t</div>
-            <div style="margin-top:8px" class="small">${t.pros[0] || ''}</div>
-          </div>
-          <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:10px">
-            <div class="badge small muted">Popularity ${t.popularity}</div>
-            <div style="display:flex;gap:8px">
-              <button data-id="${t.id}" class="addCompare">Add</button>
-              <button data-id="${t.id}" class="openDetail">View</button>
+    <div class="container mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+        <!-- Header -->
+        <header class="flex items-center justify-between p-6 bg-white border-b border-gray-200">
+            <div class="flex items-center space-x-4">
+                <!-- ETS Text Logo -->
+                <span class="text-3xl font-extrabold text-blue-600 font-garamond">ETS</span>
+                <span class="text-2xl font-bold text-gray-800">EURO TRUCK SERVICE</span>
             </div>
-          </div>
-        `;
-        popularCards.appendChild(card);
-      }
-    }
+            <nav class="hidden md:flex items-center space-x-6">
+                <!-- Combined the previous three links into a single, consolidated "Services & Info" link -->
+                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Services & Info</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a>
+                <button class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
+                    Request a Call
+                </button>
+            </nav>
+            <div class="md:hidden">
+                <button class="text-gray-600 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </header>
 
-    function renderFeatures(){
-      // collect features
-      const feats = Array.from(new Set(data.flatMap(d=>d.features||[])));
-      featuresChips.innerHTML = '';
-      feats.forEach(f=>{
-        const el = document.createElement('div'); el.className='chip'; el.textContent = f.replace(/[-]/g,' ');
-        if(state.feature === f) el.style.boxShadow='0 4px 14px rgba(12,45,65,0.6)';
-        el.addEventListener('click', ()=>{ state.feature = state.feature===f? null: f; render(); });
-        featuresChips.appendChild(el);
-      })
-    }
+        <!-- Main Hero Section -->
+        <section class="p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between bg-white-card">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-800 mb-4">
+                    Affordable truck service</h1>
+                <p class="text-gray-600 text-lg mb-6">
+                    Reliable and efficient truck service for all your business needs. We specialize in providing top-notch maintenance and repair services to keep your fleet running smoothly.
+                </p>
+                <button class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
+                    Get Started
+                </button>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://placehold.co/600x400/D1D5DB/1F2937?text=Trucks" alt="A row of white semi-trucks" class="rounded-xl shadow-lg w-full max-w-lg">
+            </div>
+        </section>
 
-    function renderCompareList(){
-      compareList.innerHTML='';
-      const arr = Array.from(state.selected);
-      if(arr.length===0) compareList.innerHTML = '<div class="muted small">No trucks selected</div>';
-      else{
-        arr.forEach(id=>{
-          const t = data.find(x=>x.id===id);
-          if(!t) return;
-          const el = document.createElement('div');
-          el.style.display='flex';el.style.justifyContent='space-between';el.style.marginTop='6px';
-          el.innerHTML = `<div>${t.name} <div class="small muted">${t.capacity} t</div></div><div style="display:flex;gap:6px"><button data-id="${t.id}" class="removeCompare">x</button></div>`;
-          compareList.appendChild(el);
-        })
-      }
-    }
+        <!-- Services Section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    Our Services
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    We offer a full range of services to keep your trucks on the road, from routine maintenance to complex repairs.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service Card 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.724-6.42A2 2 0 0015.42 4.276L19 7.854 15.42 11.428a2 2 0 00-2.828 0L9.854 13.568a2 2 0 000 2.828L13.568 19l2.122-2.122m-2.122 2.122L19 13.568a2 2 0 000-2.828L15.42 8.56a2 2 0 00-2.828 0L9.854 10.99z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Spare Parts</h3>
+                    <p class="text-gray-500">
+                        High-quality parts for all major truck brands to ensure lasting repairs.
+                    </p>
+                </div>
+                <!-- Service Card 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 21v-2m0-2a2 2 0 01-2-2v-4a2 2 0 012-2m0 8a2 2 0 012-2v-4a2 2 0 01-2-2m-7 8h14M5 12h14" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Oil Change</h3>
+                    <p class="text-gray-500">
+                        Regular oil and fluid changes to maintain engine health and performance.
+                    </p>
+                </div>
+                <!-- Service Card 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12h-3v-3m0 3v3h-3" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Accessories</h3>
+                    <p class="text-gray-500">
+                        A wide selection of accessories to customize and enhance your truck.
+                    </p>
+                </div>
+                <!-- Service Card 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 013.536 3.536L18.464 12.536m-6.464-6.464L4 18.536V22h3.464L19.536 9.464M16 16l-4-4m4 4l-4 4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Repair Services</h3>
+                    <p class="text-gray-500">
+                        Expert diagnostics and repair for mechanical, electrical, and bodywork issues.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-    // detail modal
-    function openDetail(id){
-      const t = data.find(x=>x.id===id); if(!t) return;
-      document.getElementById('dName').textContent = t.name;
-      document.getElementById('dType').textContent = t.type;
-      document.getElementById('dSummary').textContent = t.summary;
-      document.getElementById('dCap').textContent = t.capacity + ' t';
-      document.getElementById('dFuel').textContent = t.fuel || '--';
-      document.getElementById('dPrice').textContent = t.price || '--';
-      document.getElementById('dAdvice').textContent = 'Consider total cost of ownership (maintenance + fuel) along with payload needs.';
+        <!-- Service Time & Progress Section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    Our Process
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    We value your time and keep you informed every step of the way.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+                <!-- Service Time Card -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Service Time</h3>
+                    <p class="text-gray-600">
+                        Most routine services are completed within 24 hours to get you back on the road quickly.
+                    </p>
+                </div>
+                <!-- Progress Updates Card -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8V4m0 4a2 2 0 110 4m0-4a2 2 0 100 4m-4 8v-2.128a1.5 1.5 0 01.37-1.042L11 11.238l-4.13-4.132a1.5 1.5 0 01-1.04-.37L3.12 6.574A2 2 0 002 8v8a2 2 0 002 2h16a2 2 0 002-2v-8a2 2 0 00-2-2z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Progress Updates</h3>
+                    <p class="text-gray-600">
+                        We provide real-time updates on your service progress, from diagnostics to final checks.
+                    </p>
+                </div>
+                <!-- Customer Progress Chat Card -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Service Progress</h3>
+                    <div class="grid grid-cols-1 gap-4 items-start">
+                        <!-- Chat Box -->
+                        <div id="chat-box" class="chat-container text-left bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col gap-1">
+                            <!-- Chat messages will be appended here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      const specs = document.getElementById('dSpecs'); specs.innerHTML = '';
-      specs.appendChild(specEl('Engine','6-cylinder diesel'));
-      specs.appendChild(specEl('Transmission','10-speed automated'));
-      specs.appendChild(specEl('Drive','6x4'));
-      specs.appendChild(specEl('Warranty','2 years / 100,000 km'));
+        ---
 
-      const pros = document.getElementById('dPros'); pros.innerHTML = ''; t.pros.forEach(p=>{const li=document.createElement('li');li.textContent=p;pros.appendChild(li)});
-      const cons = document.getElementById('dCons'); cons.innerHTML = ''; t.cons.forEach(c=>{const li=document.createElement('li');li.textContent=c;cons.appendChild(li)});
+        <!-- Why Choose Us? Section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    Why We're the Best Choice
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    We're committed to providing exceptional service and building long-lasting relationships with our clients. Here's what sets us apart.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.116a5.002 5.002 0 010 7.07l-4.116 4.116a5.002 5.002 0 01-7.07 0l-4.116-4.116a5.002 5.002 0 010-7.07l4.116-4.116a5.002 5.002 0 017.07 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Certified Mechanics</h3>
+                    <p class="text-gray-600">Our team consists of highly trained and certified professionals who know trucks inside and out.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast and Efficient Service</h3>
+                    <p class="text-gray-600">We work quickly and effectively to minimize your downtime and get you back on the road.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6a2 2 0 110-4 2 2 0 010 4zM12 18a2 2 0 110-4 2 2 0 010 4zM12 12a2 2 0 110-4 2 2 0 010 4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Transparent Pricing</h3>
+                    <p class="text-gray-600">We provide clear, upfront pricing with no hidden fees, so you always know what to expect.</p>
+                </div>
+            </div>
+        </section>
 
-      modalBackdrop.style.display='flex';
-    }
-    function specEl(k,v){const d=document.createElement('div');d.className='spec';d.innerHTML=`<strong>${k}</strong><div class="small muted">${v}</div>`;return d}
+        ---
 
-    // compare modal
-    function openCompare(){
-      const arr = Array.from(state.selected).map(id=>data.find(x=>x.id===id)).filter(Boolean);
-      const grid = document.getElementById('compareGrid'); grid.innerHTML='';
-      if(arr.length===0){ grid.innerHTML='<div class="muted">No trucks selected for compare.</div>'; }
-      else{
-        arr.forEach(t=>{
-          const col = document.createElement('div'); col.style.minWidth='240px'; col.style.background='var(--glass)'; col.style.padding='10px'; col.style.borderRadius='10px';
-          col.innerHTML = `<h4>${t.name}</h4><div class="small muted">${t.type} • ${t.capacity} t</div><p class="small">${t.summary}</p><ul>${t.pros.map(p=>`<li>${p}</li>`).join('')}</ul><h5>Cons</h5><ul>${t.cons.map(c=>`<li>${c}</li>`).join('')}</ul>`;
-          grid.appendChild(col);
-        })
-      }
-      compareBackdrop.style.display='flex';
-    }
+        <!-- What Our Clients Say Section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    What Our Clients Say
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Don't just take our word for it. Read what our satisfied customers have to say about our service.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <p class="text-gray-700 mb-4 italic">"Euro Truck Service has been a lifesaver for my business. Their quick and reliable service keeps my fleet on the road and earning money. The staff is always friendly and professional."</p>
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=A" alt="Avatar of a client" class="rounded-full mr-4">
+                        <div>
+                            <p class="font-semibold text-gray-800">Alex R.</p>
+                            <p class="text-sm text-gray-500">Fleet Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <p class="text-gray-700 mb-4 italic">"The transparency in their pricing is fantastic. I've never been surprised by a bill. They do great work and I trust them completely with my truck's maintenance."</p>
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=B" alt="Avatar of a client" class="rounded-full mr-4">
+                        <div>
+                            <p class="font-semibold text-gray-800">Benjamin S.</p>
+                            <p class="text-sm text-gray-500">Independent Driver</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    // events
-    document.addEventListener('click', (e)=>{
-      if(e.target.matches('.openDetail')){ e.preventDefault(); openDetail(e.target.dataset.id); }
-      if(e.target.matches('.addCompare')){ const id=e.target.dataset.id; if(state.selected.size>=3 && !state.selected.has(id)){ alert('Max 3 trucks to compare'); return } state.selected.has(id)? state.selected.delete(id): state.selected.add(id); renderCompareList(); }
-      if(e.target.matches('.removeCompare')){ state.selected.delete(e.target.dataset.id); renderCompareList(); }
-    });
+        <!-- About Us Section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    About Us
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Founded in 2010, Euro Truck Service has grown from a small family-owned garage into a leading provider of truck maintenance and repair services. Our mission is to provide reliable, efficient, and honest service to keep the world's commercial fleets moving. We are committed to excellence and stand behind every repair.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center items-center gap-6">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Scania" alt="Scania logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Volvo" alt="Volvo logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=DAF" alt="DAF logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Renault" alt="Renault logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+            </div>
+        </section>
 
-    document.getElementById('closeModal').addEventListener('click', ()=>modalBackdrop.style.display='none');
-    modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) modalBackdrop.style.display='none'; });
+        <!-- "Where are we?" section -->
+        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                    Where Are We?
+                </h2>
+                <p class="text-gray-600">
+                    Visit us at our location for all your truck service needs.
+                </p>
+            </div>
+            <div class="w-full h-80 rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                <img src="https://placehold.co/1000x500/E5E7EB/4B5563?text=Map" alt="Map showing the location" class="w-full h-full object-cover">
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Contact Us</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Get in touch with us for more information or to schedule an appointment. Our team is ready to assist you.
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Our Details</h3>
+                        <p class="text-gray-600 mb-2">
+                            <span class="font-bold">Phone:</span> <a href="tel:+15551234567" class="text-blue-600 hover:underline">+1 (555) 123-4567</a>
+                        </p>
+                        <p class="text-gray-600 mb-2">
+                            <span class="font-bold">Email:</span> <a href="mailto:info@eurotruckservice.com" class="text-blue-600 hover:underline">info@eurotruckservice.com</a>
+                        </p>
+                        <p class="text-gray-600 mb-2">
+                            <span class="font-bold">Address:</span> 123 Main Street, Anytown, USA 12345
+                        </p>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Business Hours</h3>
+                        <p class="text-gray-600">
+                            <span class="font-bold">Monday - Friday:</span> 8:00 AM - 6:00 PM
+                        </p>
+                        <p class="text-gray-600">
+                            <span class="font-bold">Saturday:</span> 9:00 AM - 3:00 PM
+                        </p>
+                        <p class="text-gray-600">
+                            <span class="font-bold">Sunday:</span> Closed
+                        </p>
+                    </div>
+                </div>
+                <form class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-gray-700 font-semibold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
 
-    document.getElementById('closeCompare').addEventListener('click', ()=>compareBackdrop.style.display='none');
-    document.getElementById('openCompare').addEventListener('click', ()=>openCompare());
-    compareBackdrop.addEventListener('click', (e)=>{ if(e.target===compareBackdrop) compareBackdrop.style.display='none'; });
+        <!-- Footer -->
+        <footer class="p-6 text-center text-gray-500 border-t border-gray-200">
+            <p>&copy; 2025 EURO TRUCK SERVICE. All rights reserved.</p>
+            <p class="mt-1">
+                <span class="font-bold">Helpline:</span> <a href="tel:+15551234567" class="text-blue-600 hover:underline">+1 (555) 123-4567</a>
+            </p>
+        </footer>
+    </div>
 
-    // search & filters
-    queryInput.addEventListener('input', e=>{ state.q = e.target.value; render(); });
-    document.getElementById('clearSearch').addEventListener('click', ()=>{ queryInput.value=''; state.q=''; render(); });
-    filterType.addEventListener('change', e=>{ state.type = e.target.value; render(); });
-    sortBy.addEventListener('change', e=>{ state.sort = e.target.value; render(); });
+    <!-- JavaScript for the animated progress chat -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBox = document.getElementById('chat-box');
+            
+            const messages = [
+                { sender: 'system', text: 'Welcome! Your service has been checked in and is now pending diagnostics.' },
+                { sender: 'user', text: 'Hey, just checking in. What\'s the status?' },
+                { sender: 'system', text: 'Diagnostics are complete. We\'ve identified the main issue and a few minor repairs. We will provide a detailed quote shortly.' },
+                { sender: 'system', text: 'Quote approved. Our mechanics are beginning the repair work now.' },
+                { sender: 'system', text: 'The repair is 80% complete. We\'re just finishing up a final fluid check.' },
+                { sender: 'system', text: 'Your truck is now ready for pickup. Thank you for choosing Euro Truck Service!' }
+            ];
 
-    document.getElementById('minCapacity').addEventListener('input', (e)=> state.minCapacity = parseFloat(e.target.value) || 0);
-    document.getElementById('applyCapacity').addEventListener('click', ()=> render());
-    document.getElementById('resetFilters').addEventListener('click', ()=>{ document.getElementById('minCapacity').value=''; state.minCapacity=0; state.type='all'; filterType.value='all'; render(); });
+            let messageIndex = 0;
 
-    // export CSV
-    document.getElementById('exportCsv').addEventListener('click', ()=>{
-      const rows = data.map(t=>[t.name,t.type,t.capacity,(t.pros||[]).join('|'),(t.cons||[]).join('|'),t.price||''].join(','));
-      const csv = ['Name,Type,Capacity,Pros,Cons,Price', ...rows].join('\n');
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download='trucks.csv'; a.click(); URL.revokeObjectURL(url);
-    });
+            function addMessage() {
+                if (messageIndex < messages.length) {
+                    const message = messages[messageIndex];
+                    const messageContainer = document.createElement('div');
+                    const isSystem = message.sender === 'system';
+                    
+                    // Style the message bubble based on the sender
+                    messageContainer.className = `flex ${isSystem ? 'justify-start' : 'justify-end'} mb-2`;
+                    
+                    const messageBubble = document.createElement('div');
+                    messageBubble.className = `max-w-xs md:max-w-sm p-3 rounded-xl shadow-sm relative ${isSystem ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}`;
+                    messageBubble.textContent = message.text;
+                    
+                    messageContainer.appendChild(messageBubble);
+                    chatBox.appendChild(messageContainer);
+                    
+                    // Scroll to the bottom to show the new message
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    
+                    messageIndex++;
+                    
+                    // Set a timeout for the next message
+                    setTimeout(addMessage, 2000); // Wait 2 seconds before the next message
+                }
+            }
+            
+            // Start the message display process on page load
+            addMessage();
+        });
+    </script>
 
-    // initial render
-    render();
-
-    // small accessibility: keyboard close
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ modalBackdrop.style.display='none'; compareBackdrop.style.display='none'; } });
-
-    // helpful: expose state in console for quick edits while demoing
-    window._truckDemo = {data, state, render};
-  </script>
 </body>
 </html>
