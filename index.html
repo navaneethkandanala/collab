@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truck Service Dashboard</title>
+    <title>The Daily Dairy Co.</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -15,8 +15,12 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
         }
+
+        .bg-dairy-blue {
+            background-color: #E6F0F8;
+        }
+
         .container {
             max-width: 1200px;
         }
@@ -46,22 +50,22 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 flex justify-center">
+<body class="bg-dairy-blue min-h-screen p-4 flex justify-center">
 
     <div class="container mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
         <!-- Header -->
         <header class="flex items-center justify-between p-6 bg-white border-b border-gray-200">
             <div class="flex items-center space-x-4">
-                <!-- ETS Text Logo -->
-                <span class="text-3xl font-extrabold text-blue-600 font-garamond">ETS</span>
-                <span class="text-2xl font-bold text-gray-800">EURO TRUCK SERVICE</span>
+                <!-- DDC Text Logo -->
+                <span class="text-3xl font-extrabold text-blue-500 font-garamond">DDC</span>
+                <span class="text-2xl font-bold text-gray-800">THE DAILY DAIRY CO.</span>
             </div>
             <nav class="hidden md:flex items-center space-x-6">
-                <!-- Combined the previous three links into a single, consolidated "Services & Info" link -->
-                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Services & Info</a>
-                <a href="#contact" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a>
-                <button class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
-                    Request a Call
+                <a href="#products" class="text-gray-600 hover:text-blue-500 font-medium">Our Products</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-500 font-medium">About Us</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-500 font-medium">Contact</a>
+                <button class="bg-blue-500 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    Order Now
                 </button>
             </nav>
             <div class="md:hidden">
@@ -77,119 +81,122 @@
         <section class="p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between bg-white-card">
             <div class="md:w-1/2 mb-8 md:mb-0">
                 <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-800 mb-4">
-                    Affordable truck service</h1>
+                    Fresh, Wholesome Dairy</h1>
                 <p class="text-gray-600 text-lg mb-6">
-                    Reliable and efficient truck service for all your business needs. We specialize in providing top-notch maintenance and repair services to keep your fleet running smoothly.
+                    Delivering farm-fresh milk directly to your doorstep. We are committed to purity, quality, and a taste that brings a smile to your face.
                 </p>
-                <button class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
-                    Get Started
+                <button class="bg-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    Explore Products
                 </button>
             </div>
             <div class="md:w-1/2 flex justify-center">
-                <img src="https://placehold.co/600x400/D1D5DB/1F2937?text=Trucks" alt="A row of white semi-trucks" class="rounded-xl shadow-lg w-full max-w-lg">
+                <img src="https://placehold.co/600x400/D1D5DB/1F2937?text=Fresh+Dairy+Products" alt="Various dairy products like milk, yogurt, and cheese" class="rounded-xl shadow-lg w-full max-w-lg">
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+        <!-- Our Promise Section -->
+        <section id="products" class="p-8 md:p-12 lg:p-16 bg-blue-50 border-t border-gray-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                    Our Services
+                    Our Promise of Freshness
                 </h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    We offer a full range of services to keep your trucks on the road, from routine maintenance to complex repairs.
+                    We ensure every drop of our milk is pure, safe, and delicious.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Service Card 1 -->
+                <!-- Promise Card 1 -->
                 <div class="bg-white p-6 rounded-xl shadow-custom text-center">
                     <div class="flex justify-center mb-4">
                         <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.724-6.42A2 2 0 0015.42 4.276L19 7.854 15.42 11.428a2 2 0 00-2.828 0L9.854 13.568a2 2 0 000 2.828L13.568 19l2.122-2.122m-2.122 2.122L19 13.568a2 2 0 000-2.828L15.42 8.56a2 2 0 00-2.828 0L9.854 10.99z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Spare Parts</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Locally Sourced</h3>
                     <p class="text-gray-500">
-                        High-quality parts for all major truck brands to ensure lasting repairs.
+                        Our milk comes from local farms, ensuring maximum freshness and supporting our community.
                     </p>
                 </div>
-                <!-- Service Card 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
-                    <div class="flex justify-center mb-4">
-                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 21v-2m0-2a2 2 0 01-2-2v-4a2 2 0 012-2m0 8a2 2 0 012-2v-4a2 2 0 01-2-2m-7 8h14M5 12h14" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Oil Change</h3>
-                    <p class="text-gray-500">
-                        Regular oil and fluid changes to maintain engine health and performance.
-                    </p>
-                </div>
-                <!-- Service Card 3 -->
+                <!-- Promise Card 2 -->
                 <div class="bg-white p-6 rounded-xl shadow-custom text-center">
                     <div class="flex justify-center mb-4">
                         <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12h-3v-3m0 3v3h-3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Accessories</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Pasteurized for Safety</h3>
                     <p class="text-gray-500">
-                        A wide selection of accessories to customize and enhance your truck.
+                        Every batch is pasteurized to the highest standards for purity and safety.
                     </p>
                 </div>
-                <!-- Service Card 4 -->
+                <!-- Promise Card 3 -->
                 <div class="bg-white p-6 rounded-xl shadow-custom text-center">
                     <div class="flex justify-center mb-4">
                         <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 013.536 3.536L18.464 12.536m-6.464-6.464L4 18.536V22h3.464L19.536 9.464M16 16l-4-4m4 4l-4 4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v6a4 4 0 004 4h4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Repair Services</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Daily Deliveries</h3>
                     <p class="text-gray-500">
-                        Expert diagnostics and repair for mechanical, electrical, and bodywork issues.
+                        Enjoy the convenience of fresh milk delivered straight to your door, every morning.
+                    </p>
+                </div>
+                <!-- Promise Card 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v2m-3-4h6m-3-5V7a2 2 0 012-2h2a2 2 0 012 2v2m-4 0v1h-2a2 2 0 01-2-2m-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Sustainable Packaging</h3>
+                    <p class="text-gray-500">
+                        We use eco-friendly and recyclable packaging to minimize our environmental footprint.
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- Service Time & Progress Section -->
+        <!-- Journey & Order Tracker Section -->
         <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                    Our Process
+                    Our Journey to Your Table
                 </h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    We value your time and keep you informed every step of the way.
+                    Track the journey of your milk from our farm to your fridge.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-                <!-- Service Time Card -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
-                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Service Time</h3>
-                    <p class="text-gray-600">
-                        Most routine services are completed within 24 hours to get you back on the road quickly.
-                    </p>
-                </div>
-                <!-- Progress Updates Card -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
-                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- Journey Card 1 -->
+                <div class="bg-blue-100 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8V4m0 4a2 2 0 110 4m0-4a2 2 0 100 4m-4 8v-2.128a1.5 1.5 0 01.37-1.042L11 11.238l-4.13-4.132a1.5 1.5 0 01-1.04-.37L3.12 6.574A2 2 0 002 8v8a2 2 0 002 2h16a2 2 0 002-2v-8a2 2 0 00-2-2z" />
                     </svg>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Progress Updates</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">From the Farm</h3>
                     <p class="text-gray-600">
-                        We provide real-time updates on your service progress, from diagnostics to final checks.
+                        Our journey begins with our happy, healthy cows on our local partner farms.
                     </p>
                 </div>
-                <!-- Customer Progress Chat Card -->
+                <!-- Journey Card 2 -->
+                <div class="bg-blue-100 p-6 rounded-xl shadow-custom">
+                    <svg class="h-16 w-16 text-blue-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Into the Bottle</h3>
+                    <p class="text-gray-600">
+                        The fresh milk is carefully processed and bottled with care to preserve its quality.
+                    </p>
+                </div>
+                <!-- Order Tracker Chat Card -->
                 <div class="bg-white p-6 rounded-xl shadow-custom">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Service Progress</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Order Tracker</h3>
                     <div class="grid grid-cols-1 gap-4 items-start">
                         <!-- Chat Box -->
-                        <div id="chat-box" class="chat-container text-left bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col gap-1">
+                        <div id="chat-box" class="chat-container text-left bg-blue-50 p-4 rounded-lg border border-gray-200 flex flex-col gap-1">
                             <!-- Chat messages will be appended here by JavaScript -->
                         </div>
                     </div>
@@ -197,75 +204,34 @@
             </div>
         </section>
 
-        ---
-
-        <!-- Why Choose Us? Section -->
-        <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                    Why We're the Best Choice
-                </h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    We're committed to providing exceptional service and building long-lasting relationships with our clients. Here's what sets us apart.
-                </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
-                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.116a5.002 5.002 0 010 7.07l-4.116 4.116a5.002 5.002 0 01-7.07 0l-4.116-4.116a5.002 5.002 0 010-7.07l4.116-4.116a5.002 5.002 0 017.07 0z" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Certified Mechanics</h3>
-                    <p class="text-gray-600">Our team consists of highly trained and certified professionals who know trucks inside and out.</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
-                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast and Efficient Service</h3>
-                    <p class="text-gray-600">We work quickly and effectively to minimize your downtime and get you back on the road.</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-xl shadow-custom">
-                    <svg class="h-16 w-16 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6a2 2 0 110-4 2 2 0 010 4zM12 18a2 2 0 110-4 2 2 0 010 4zM12 12a2 2 0 110-4 2 2 0 010 4z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Transparent Pricing</h3>
-                    <p class="text-gray-600">We provide clear, upfront pricing with no hidden fees, so you always know what to expect.</p>
-                </div>
-            </div>
-        </section>
-
-        ---
-
         <!-- What Our Clients Say Section -->
-        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+        <section class="p-8 md:p-12 lg:p-16 bg-blue-50 border-t border-gray-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
                     What Our Clients Say
                 </h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    Don't just take our word for it. Read what our satisfied customers have to say about our service.
+                    Hear from our satisfied customers who love the taste and quality of our milk.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-xl shadow-custom">
-                    <p class="text-gray-700 mb-4 italic">"Euro Truck Service has been a lifesaver for my business. Their quick and reliable service keeps my fleet on the road and earning money. The staff is always friendly and professional."</p>
+                    <p class="text-gray-700 mb-4 italic">"The Daily Dairy Co. is a game-changer! The milk is so fresh and delicious, it reminds me of my childhood. The daily delivery service is incredibly convenient."</p>
                     <div class="flex items-center">
-                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=A" alt="Avatar of a client" class="rounded-full mr-4">
+                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=S" alt="Avatar of a client" class="rounded-full mr-4">
                         <div>
-                            <p class="font-semibold text-gray-800">Alex R.</p>
-                            <p class="text-sm text-gray-500">Fleet Manager</p>
+                            <p class="font-semibold text-gray-800">Sarah P.</p>
+                            <p class="text-sm text-gray-500">Happy Customer</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-custom">
-                    <p class="text-gray-700 mb-4 italic">"The transparency in their pricing is fantastic. I've never been surprised by a bill. They do great work and I trust them completely with my truck's maintenance."</p>
+                    <p class="text-gray-700 mb-4 italic">"I switched to The Daily Dairy Co. for their sustainable practices. Not only do I feel good about my choice, but the milk is the best I've ever tasted. I highly recommend them!"</p>
                     <div class="flex items-center">
-                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=B" alt="Avatar of a client" class="rounded-full mr-4">
+                        <img src="https://placehold.co/50x50/E5E7EB/4B5563?text=J" alt="Avatar of a client" class="rounded-full mr-4">
                         <div>
-                            <p class="font-semibold text-gray-800">Benjamin S.</p>
-                            <p class="text-sm text-gray-500">Independent Driver</p>
+                            <p class="font-semibold text-gray-800">John L.</p>
+                            <p class="text-sm text-gray-500">Conscious Consumer</p>
                         </div>
                     </div>
                 </div>
@@ -273,35 +239,34 @@
         </section>
 
         <!-- About Us Section -->
-        <section class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
+        <section id="about" class="p-8 md:p-12 lg:p-16 bg-white-card border-t border-gray-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
                     About Us
                 </h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    Founded in 2010, Euro Truck Service has grown from a small family-owned garage into a leading provider of truck maintenance and repair services. Our mission is to provide reliable, efficient, and honest service to keep the world's commercial fleets moving. We are committed to excellence and stand behind every repair.
+                    Founded with a passion for providing fresh, healthy milk, The Daily Dairy Co. partners with local farms to bring you the highest quality dairy products. Our mission is to connect consumers with the source of their food, ensuring purity and transparency every step of the way.
                 </p>
             </div>
             <div class="flex flex-wrap justify-center items-center gap-6">
-                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Scania" alt="Scania logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Volvo" alt="Volvo logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=DAF" alt="DAF logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Renault" alt="Renault logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Dairy+Farm+1" alt="Dairy Farm logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Local+Farms" alt="Local Farms logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+                <img src="https://placehold.co/120x60/D1D5DB/1F2937?text=Purity+Co." alt="Purity Co. logo" class="h-12 w-auto opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
             </div>
         </section>
 
         <!-- "Where are we?" section -->
-        <section class="p-8 md:p-12 lg:p-16 bg-gray-50 border-t border-gray-200">
+        <section class="p-8 md:p-12 lg:p-16 bg-blue-50 border-t border-gray-200">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">
-                    Where Are We?
+                    Our Local Reach
                 </h2>
                 <p class="text-gray-600">
-                    Visit us at our location for all your truck service needs.
+                    Proudly serving local communities with fresh, daily deliveries.
                 </p>
             </div>
             <div class="w-full h-80 rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                <img src="https://placehold.co/1000x500/E5E7EB/4B5563?text=Map" alt="Map showing the location" class="w-full h-full object-cover">
+                <img src="https://placehold.co/1000x500/E5E7EB/4B5563?text=Local+Delivery+Map" alt="Map showing the local delivery area" class="w-full h-full object-cover">
             </div>
         </section>
         
@@ -310,37 +275,34 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">Contact Us</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    Get in touch with us for more information or to schedule an appointment. Our team is ready to assist you.
+                    Have questions about our milk or delivery service? We'd love to hear from you.
                 </p>
             </div>
             <div class="max-w-3xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                    <div class="p-6 bg-blue-50 rounded-xl shadow-custom">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Our Details</h3>
                         <p class="text-gray-600 mb-2">
-                            <span class="font-bold">Phone:</span> <a href="tel:+15551234567" class="text-blue-600 hover:underline">+1 (555) 123-4567</a>
+                            <span class="font-bold">Phone:</span> <a href="tel:+15555555555" class="text-blue-500 hover:underline">+1 (555) 555-5555</a>
                         </p>
                         <p class="text-gray-600 mb-2">
-                            <span class="font-bold">Email:</span> <a href="mailto:info@eurotruckservice.com" class="text-blue-600 hover:underline">info@eurotruckservice.com</a>
+                            <span class="font-bold">Email:</span> <a href="mailto:info@dailydairy.co" class="text-blue-500 hover:underline">info@dailydairy.co</a>
                         </p>
                         <p class="text-gray-600 mb-2">
-                            <span class="font-bold">Address:</span> 123 Main Street, Anytown, USA 12345
+                            <span class="font-bold">Address:</span> 456 Farm Road, Rural Town, USA 54321
                         </p>
                     </div>
-                    <div class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                    <div class="p-6 bg-blue-50 rounded-xl shadow-custom">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Business Hours</h3>
                         <p class="text-gray-600">
-                            <span class="font-bold">Monday - Friday:</span> 8:00 AM - 6:00 PM
+                            <span class="font-bold">Monday - Sunday:</span> 6:00 AM - 10:00 PM
                         </p>
                         <p class="text-gray-600">
-                            <span class="font-bold">Saturday:</span> 9:00 AM - 3:00 PM
-                        </p>
-                        <p class="text-gray-600">
-                            <span class="font-bold">Sunday:</span> Closed
+                            <span class="font-bold">Delivery Hours:</span> 6:00 AM - 9:00 AM
                         </p>
                     </div>
                 </div>
-                <form class="p-6 bg-gray-50 rounded-xl shadow-custom">
+                <form class="p-6 bg-blue-50 rounded-xl shadow-custom">
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
                         <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -353,7 +315,7 @@
                         <label for="message" class="block text-gray-700 font-semibold mb-2">Message</label>
                         <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
+                    <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
                         Send Message
                     </button>
                 </form>
@@ -362,25 +324,22 @@
 
         <!-- Footer -->
         <footer class="p-6 text-center text-gray-500 border-t border-gray-200">
-            <p>&copy; 2025 EURO TRUCK SERVICE. All rights reserved.</p>
-            <p class="mt-1">
-                <span class="font-bold">Helpline:</span> <a href="tel:+15551234567" class="text-blue-600 hover:underline">+1 (555) 123-4567</a>
-            </p>
+            <p>&copy; 2025 THE DAILY DAIRY CO. All rights reserved.</p>
         </footer>
     </div>
 
-    <!-- JavaScript for the animated progress chat -->
+    <!-- JavaScript for the animated order tracker chat -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const chatBox = document.getElementById('chat-box');
             
             const messages = [
-                { sender: 'system', text: 'Welcome! Your service has been checked in and is now pending diagnostics.' },
-                { sender: 'user', text: 'Hey, just checking in. What\'s the status?' },
-                { sender: 'system', text: 'Diagnostics are complete. We\'ve identified the main issue and a few minor repairs. We will provide a detailed quote shortly.' },
-                { sender: 'system', text: 'Quote approved. Our mechanics are beginning the repair work now.' },
-                { sender: 'system', text: 'The repair is 80% complete. We\'re just finishing up a final fluid check.' },
-                { sender: 'system', text: 'Your truck is now ready for pickup. Thank you for choosing Euro Truck Service!' }
+                { sender: 'system', text: 'Welcome! Your order has been placed and is now being processed at the farm.' },
+                { sender: 'user', text: 'Hi! Can you tell me the status of my milk delivery?' },
+                { sender: 'system', text: 'Your milk has been collected and is now in our bottling facility. It will be ready for delivery shortly.' },
+                { sender: 'system', text: 'Bottling complete. Your fresh milk has been loaded onto our delivery vehicle.' },
+                { sender: 'system', text: 'Your delivery is on its way! You can expect it to arrive within the next hour.' },
+                { sender: 'system', text: 'Your milk has been delivered. Enjoy your fresh, wholesome milk!' }
             ];
 
             let messageIndex = 0;
