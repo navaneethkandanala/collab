@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Truck Dashboard (Card Layout)</title>
+  <title>Truck Dashboard</title>
   <style>
     body {
       margin: 0;
@@ -16,72 +16,93 @@
       padding: 20px;
       text-align: center;
     }
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+    header h1 { margin: 0; }
     .container {
+      display: flex;
       max-width: 1200px;
       margin: 20px auto;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
-    .card {
+    .list {
+      flex: 1;
       background: #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      border-radius: 10px;
+      padding: 10px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .card {
       display: flex;
-      flex-direction: column;
+      gap: 10px;
+      background: #334155;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: 0.2s;
     }
+    .card:hover { background: #475569; }
     .card img {
-      width: 100%;
-      height: 180px;
+      width: 80px;
+      height: 60px;
       object-fit: cover;
+      border-radius: 6px;
     }
-    .card-content {
-      padding: 15px;
+    .card h3 {
+      margin: 0;
+      font-size: 16px;
     }
-    .card-content h2 {
-      margin: 0 0 5px;
-      font-size: 18px;
-    }
-    .card-content p {
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: #94a3b8;
-    }
-    .specs, .pros, .cons {
-      margin: 10px 0;
+    .card p {
+      margin: 2px 0 0;
       font-size: 13px;
+      color: #cbd5e1;
     }
+    .details {
+      flex: 2;
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 20px;
+      min-height: 400px;
+    }
+    .details img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .specs, .pros, .cons { margin: 10px 0; }
     .pros li { color: #22c55e; }
     .cons li { color: #ef4444; }
-    .btn {
-      margin-top: auto;
-      padding: 10px;
-      background: #06b6d4;
-      color: white;
+    .search {
       text-align: center;
-      cursor: pointer;
-      border: none;
-      border-radius: 0 0 12px 12px;
-      font-size: 14px;
+      margin: 15px;
     }
-    .btn:hover {
-      background: #0891b2;
+    .search input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 90%;
+      max-width: 400px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Truck Dashboard (Card Layout)</h1>
-    <p>Explore trucks, their pros & cons, and key specifications.</p>
+    <h1>Truck Dashboard</h1>
+    <p>Browse trucks, compare pros & cons, and view details.</p>
   </header>
 
-  <div class="container" id="truckContainer"></div>
+  <div class="search">
+    <input type="text" id="searchBox" placeholder="Search by truck name or manufacturer...">
+  </div>
+
+  <div class="container">
+    <div class="list" id="truckList"></div>
+    <div class="details" id="truckDetails">
+      <h2>Select a truck to view details</h2>
+    </div>
+  </div>
 
   <script>
     const trucks = [
@@ -89,7 +110,7 @@
         name: 'Volvo FH',
         manufacturer: 'Volvo',
         image: 'https://images.unsplash.com/photo-1591840431233-1c3d3d6c8a2e?auto=format&fit=crop&w=1200&q=70',
-        overview: 'High-comfort long-haul truck with excellent fuel economy.',
+        overview: 'High-comfort long-haul truck with excellent fuel economy and safety features.',
         pros: ['Comfortable cabin', 'Advanced safety systems', 'Good fuel efficiency'],
         cons: ['Higher purchase price', 'Costly spare parts'],
         specs: { power: '460 hp', torque: '2300 Nm', payload: '25,000 kg' }
@@ -98,16 +119,16 @@
         name: 'Scania R-Series',
         manufacturer: 'Scania',
         image: 'https://images.unsplash.com/photo-1558981285-61b2be1d4b4a?auto=format&fit=crop&w=1200&q=70',
-        overview: 'Reliable heavy-duty truck with strong performance.',
+        overview: 'A reliable heavy-duty truck with strong performance.',
         pros: ['Modular design', 'Powerful engines', 'Driver-friendly'],
-        cons: ['Heavier maintenance', 'High service costs'],
+        cons: ['Heavier maintenance needs', 'Higher service costs'],
         specs: { power: '500 hp', torque: '2500 Nm', payload: '27,000 kg' }
       },
       {
         name: 'Mercedes-Benz Actros',
         manufacturer: 'Mercedes-Benz',
         image: 'https://images.unsplash.com/photo-1558980664-10b6f7f0a799?auto=format&fit=crop&w=1200&q=70',
-        overview: 'Tech-forward truck with efficient drivetrains.',
+        overview: 'Tech-forward truck with great ergonomics and efficient drivetrains.',
         pros: ['High-tech features', 'Comfortable cabin', 'Efficient driveline'],
         cons: ['Initial cost', 'Complex electronics'],
         specs: { power: '480 hp', torque: '2400 Nm', payload: '26,000 kg' }
@@ -116,44 +137,65 @@
         name: 'Tata Signa',
         manufacturer: 'Tata',
         image: 'https://images.unsplash.com/photo-1563729784472-3d2f9f6a4a2f?auto=format&fit=crop&w=1200&q=70',
-        overview: 'Cost-effective truck popular in India.',
-        pros: ['Low cost', 'Wide service network', 'Robust design'],
+        overview: 'Cost-effective and widely supported heavy truck popular in India.',
+        pros: ['Low initial cost', 'Wide service network', 'Robust design'],
         cons: ['Lower cabin comfort', 'Less fuel-efficient'],
         specs: { power: '330 hp', torque: '1400 Nm', payload: '18,000 kg' }
       }
     ];
 
-    const container = document.getElementById('truckContainer');
+    const list = document.getElementById('truckList');
+    const details = document.getElementById('truckDetails');
+    const searchBox = document.getElementById('searchBox');
 
-    trucks.forEach(truck => {
-      const card = document.createElement('div');
-      card.className = 'card';
+    function renderList(filterText = '') {
+      list.innerHTML = '';
+      trucks
+        .filter(t => 
+          t.name.toLowerCase().includes(filterText.toLowerCase()) ||
+          t.manufacturer.toLowerCase().includes(filterText.toLowerCase())
+        )
+        .forEach(truck => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${truck.image}" alt="${truck.name}">
+            <div>
+              <h3>${truck.name}</h3>
+              <p>${truck.manufacturer}</p>
+            </div>
+          `;
+          card.addEventListener('click', () => showDetails(truck));
+          list.appendChild(card);
+        });
+    }
 
-      card.innerHTML = `
+    function showDetails(truck) {
+      details.innerHTML = `
         <img src="${truck.image}" alt="${truck.name}">
-        <div class="card-content">
-          <h2>${truck.name}</h2>
-          <p>${truck.manufacturer}</p>
-          <div class="specs">
-            <strong>Specs:</strong>
-            <div>Power: ${truck.specs.power}</div>
-            <div>Torque: ${truck.specs.torque}</div>
-            <div>Payload: ${truck.specs.payload}</div>
-          </div>
-          <div class="pros">
-            <strong>Pros:</strong>
-            <ul>${truck.pros.map(p => `<li>${p}</li>`).join('')}</ul>
-          </div>
-          <div class="cons">
-            <strong>Cons:</strong>
-            <ul>${truck.cons.map(c => `<li>${c}</li>`).join('')}</ul>
-          </div>
+        <h2>${truck.name}</h2>
+        <h4>Manufacturer: ${truck.manufacturer}</h4>
+        <p>${truck.overview}</p>
+        <div class="specs">
+          <h3>Specifications</h3>
+          <p>Power: ${truck.specs.power}</p>
+          <p>Torque: ${truck.specs.torque}</p>
+          <p>Payload: ${truck.specs.payload}</p>
         </div>
-        <button class="btn">More Info</button>
+        <div class="pros">
+          <h3>Pros</h3>
+          <ul>${truck.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="cons">
+          <h3>Cons</h3>
+          <ul>${truck.cons.map(c => `<li>${c}</li>`).join('')}</ul>
+        </div>
       `;
+    }
 
-      container.appendChild(card);
-    });
+    searchBox.addEventListener('input', e => renderList(e.target.value));
+
+    renderList();
   </script>
 </body>
 </html>
