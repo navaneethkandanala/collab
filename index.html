@@ -411,16 +411,39 @@
                     <span class="text-xl font-bold text-gray-800">Total:</span>
                     <span id="cart-total" class="text-xl font-bold text-blue-600">₹0</span>
                 </div>
-                <!-- New: UPI Payment Button -->
-                <button id="upi-pay-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition duration-300 mb-2">
-                    Pay with UPI
-                </button>
-                <button class="w-full bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
-                    Proceed to Checkout
-                </button>
-                <p id="payment-message" class="hidden mt-4 text-center text-green-700 font-bold"></p>
+                <!-- Payment buttons and new UPI payment form -->
+                <div id="payment-options">
+                    <button id="show-upi-form-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition duration-300 mb-2">
+                        Pay with UPI
+                    </button>
+                    <button class="w-full bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                        Proceed to Checkout
+                    </button>
+                </div>
+                
+                <!-- New: UPI Payment Form (hidden by default) -->
+                <div id="upi-form" class="hidden mt-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Enter UPI Details</h3>
+                    <div class="mb-4">
+                        <label for="upi-id" class="block text-gray-700 font-semibold mb-2">UPI ID</label>
+                        <input type="text" id="upi-id" placeholder="e.g., yourname@bank" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button id="pay-now-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition duration-300 mb-2">
+                        Pay Now
+                    </button>
+                    <button id="back-to-cart-btn" class="w-full bg-gray-300 text-gray-700 font-semibold py-3 px-8 rounded-full hover:bg-gray-400 transition duration-300">
+                        Back to Cart
+                    </button>
+                </div>
+                
+                <p id="payment-message" class="hidden mt-4 text-center text-red-500 font-bold"></p>
             </div>
         </div>
+    </div>
+    
+    <!-- Toast notification for successful payment -->
+    <div id="success-toast" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-xl transition-opacity duration-300 z-50">
+        <p>Payment Successful! Your order will be delivered soon.</p>
     </div>
 
 
@@ -497,8 +520,14 @@
             const cartTotalElement = document.getElementById('cart-total');
             const cartCountElement = document.getElementById('cart-count');
             const emptyCartMessage = document.getElementById('empty-cart-message');
-            const upiPayBtn = document.getElementById('upi-pay-btn');
+            const showUpiFormBtn = document.getElementById('show-upi-form-btn');
+            const paymentOptions = document.getElementById('payment-options');
+            const upiForm = document.getElementById('upi-form');
+            const payNowBtn = document.getElementById('pay-now-btn');
+            const backToCartBtn = document.getElementById('back-to-cart-btn');
+            const upiIdInput = document.getElementById('upi-id');
             const paymentMessage = document.getElementById('payment-message');
+            const successToast = document.getElementById('success-toast');
 
             let cart = [];
 
@@ -594,6 +623,9 @@
             cartButton.addEventListener('click', () => {
                 cartModal.classList.remove('hidden');
                 paymentMessage.classList.add('hidden'); // Hide any previous payment messages
+                paymentOptions.classList.remove('hidden');
+                upiForm.classList.add('hidden');
+                upiIdInput.value = '';
             });
 
             closeCartBtn.addEventListener('click', () => {
@@ -607,18 +639,56 @@
                 }
             });
 
-            // UPI Payment Button functionality
-            upiPayBtn.addEventListener('click', () => {
-                if (cart.length > 0) {
-                    paymentMessage.textContent = 'Payment successful via UPI! Your order will be delivered soon.';
-                    paymentMessage.classList.remove('hidden');
-                    cart = []; // Clear the cart after successful payment
-                    updateCartDisplay();
-                } else {
+            // Show UPI Form when "Pay with UPI" is clicked
+            showUpiFormBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
                     paymentMessage.textContent = 'Your cart is empty. Please add items to proceed.';
                     paymentMessage.classList.remove('hidden');
+                    paymentMessage.classList.remove('text-green-700');
+                    paymentMessage.classList.add('text-red-500');
+                } else {
+                    paymentOptions.classList.add('hidden');
+                    upiForm.classList.remove('hidden');
+                    paymentMessage.classList.add('hidden');
                 }
             });
+
+            // Back button in UPI form
+            backToCartBtn.addEventListener('click', () => {
+                upiForm.classList.add('hidden');
+                paymentOptions.classList.remove('hidden');
+                paymentMessage.classList.add('hidden');
+            });
+            
+            // UPI "Pay Now" button functionality
+            payNowBtn.addEventListener('click', () => {
+                const upiId = upiIdInput.value.trim();
+                if (upiId === '') {
+                    paymentMessage.textContent = 'Please enter a valid UPI ID.';
+                    paymentMessage.classList.remove('hidden');
+                    paymentMessage.classList.remove('text-green-700');
+                    paymentMessage.classList.add('text-red-500');
+                } else {
+                    // Simulate successful payment
+                    cart = []; // Clear the cart
+                    updateCartDisplay();
+                    cartModal.classList.add('hidden');
+                    showToast();
+                }
+            });
+
+            // Function to show the toast notification
+            function showToast() {
+                successToast.classList.remove('hidden');
+                successToast.classList.add('opacity-100');
+                setTimeout(() => {
+                    successToast.classList.remove('opacity-100');
+                    successToast.classList.add('opacity-0');
+                    setTimeout(() => {
+                        successToast.classList.add('hidden');
+                    }, 300);
+                }, 3000);
+            }
             
             // Initial cart display update
             updateCartDisplay();
