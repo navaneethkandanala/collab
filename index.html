@@ -411,9 +411,14 @@
                     <span class="text-xl font-bold text-gray-800">Total:</span>
                     <span id="cart-total" class="text-xl font-bold text-blue-600">₹0</span>
                 </div>
+                <!-- New: UPI Payment Button -->
+                <button id="upi-pay-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition duration-300 mb-2">
+                    Pay with UPI
+                </button>
                 <button class="w-full bg-blue-500 text-white py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
                     Proceed to Checkout
                 </button>
+                <p id="payment-message" class="hidden mt-4 text-center text-green-700 font-bold"></p>
             </div>
         </div>
     </div>
@@ -492,6 +497,8 @@
             const cartTotalElement = document.getElementById('cart-total');
             const cartCountElement = document.getElementById('cart-count');
             const emptyCartMessage = document.getElementById('empty-cart-message');
+            const upiPayBtn = document.getElementById('upi-pay-btn');
+            const paymentMessage = document.getElementById('payment-message');
 
             let cart = [];
 
@@ -586,6 +593,7 @@
             // Show/Hide Cart Modal
             cartButton.addEventListener('click', () => {
                 cartModal.classList.remove('hidden');
+                paymentMessage.classList.add('hidden'); // Hide any previous payment messages
             });
 
             closeCartBtn.addEventListener('click', () => {
@@ -596,6 +604,19 @@
             cartModal.addEventListener('click', (e) => {
                 if (e.target === cartModal) {
                     cartModal.classList.add('hidden');
+                }
+            });
+
+            // UPI Payment Button functionality
+            upiPayBtn.addEventListener('click', () => {
+                if (cart.length > 0) {
+                    paymentMessage.textContent = 'Payment successful via UPI! Your order will be delivered soon.';
+                    paymentMessage.classList.remove('hidden');
+                    cart = []; // Clear the cart after successful payment
+                    updateCartDisplay();
+                } else {
+                    paymentMessage.textContent = 'Your cart is empty. Please add items to proceed.';
+                    paymentMessage.classList.remove('hidden');
                 }
             });
             
